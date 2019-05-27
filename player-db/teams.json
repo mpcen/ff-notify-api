@@ -1,0 +1,196 @@
+{
+    "teams": [
+        {
+            "id": 1,
+            "name": "Arizona Cardinals",
+            "url": "azcardinals.com",
+            "abbrev": ""
+        },
+        {
+            "id": 2,
+            "name": "Atlanta Falcons",
+            "url": "atlantafalcons.com",
+            "abbrev": ""
+        },
+        {
+            "id": 3,
+            "name": "Baltimore Ravens",
+            "url": "baltimoreravens.com",
+            "abbrev": ""
+        },
+        {
+            "id": 4,
+            "name": "Buffalo Bills",
+            "url": "buffalobills.com",
+            "abbrev": ""
+        },
+        {
+            "id": 5,
+            "name": "Carolina Panthers",
+            "url": "panthers.com",
+            "abbrev": ""
+        },
+        {
+            "id": 6,
+            "name": "Chicago Bears",
+            "url": "chicagobears.com",
+            "abbrev": ""
+        },
+        {
+            "id": 7,
+            "name": "Cincinnati Bengals",
+            "url": "bengals.com",
+            "abbrev": ""
+        },
+        {
+            "id": 8,
+            "name": "Cleveland Browns",
+            "url": "clevelandbrowns.com",
+            "abbrev": ""
+        },
+        {
+            "id": 9,
+            "name": "Dallas Cowboys",
+            "url": "dallascowboys.com",
+            "abbrev": ""
+        },
+        {
+            "id": 10,
+            "name": "Denver Broncos",
+            "url": "denverbroncos.com",
+            "abbrev": ""
+        },
+        {
+            "id": 11,
+            "name": "Detriot Lions",
+            "url": "detroitlions.com",
+            "abbrev": ""
+        },
+        {
+            "id": 12,
+            "name": "Green Bay Packers",
+            "url": "packers.com",
+            "abbrev": ""
+        },
+        {
+            "id": 13,
+            "name": "Houston Texans",
+            "url": "houstontexans.com",
+            "abbrev": ""
+        },
+        {
+            "id": 14,
+            "name": "Indianapolis Colts",
+            "url": "www.colts.com",
+            "abbrev": ""
+        },
+        {
+            "id": 15,
+            "name": "Jacksonville Jaguars",
+            "url": "jaguars.com",
+            "abbrev": ""
+        },
+        {
+            "id": 16,
+            "name": "Kansas City Chiefs",
+            "url": "chiefs.com",
+            "abbrev": ""
+        },
+        {
+            "id": 17,
+            "name": "Los Angeles Chargers",
+            "url": "chargers.com",
+            "abbrev": ""
+        },
+        {
+            "id": 18,
+            "name": "Los Angeles Rams",
+            "url": "therams.com",
+            "abbrev": ""
+        },
+        {
+            "id": 19,
+            "name": "Miami Dolphins",
+            "url": "miamidolphins.com",
+            "abbrev": ""
+        },
+        {
+            "id": 20,
+            "name": "Minnesota Vikings",
+            "url": "vikings.com",
+            "abbrev": ""
+        },
+        {
+            "id": 21,
+            "name": "New England Patriots",
+            "url": "patriots.com",
+            "abbrev": ""
+        },
+        {
+            "id": 22,
+            "name": "New Orleans Saints",
+            "url": "neworleanssaints.com",
+            "abbrev": ""
+        },
+        {
+            "id": 23,
+            "name": "New York Giants",
+            "url": "giants.com",
+            "abbrev": ""
+        },
+        {
+            "id": 24,
+            "name": "New York Jets",
+            "url": "newyorkjets.com",
+            "abbrev": ""
+        },
+        {
+            "id": 25,
+            "name": "Oakland Raiders",
+            "url": "raiders.com",
+            "abbrev": ""
+        },
+        {
+            "id": 26,
+            "name": "Philadelphia Eagles",
+            "url": "philadelphiaeagles.com",
+            "abbrev": ""
+        },
+        {
+            "id": 27,
+            "name": "Pittsburgh Steelers",
+            "url": "steelers.com",
+            "abbrev": ""
+        },
+        {
+            "id": 28,
+            "name": "San Francisco 49ers",
+            "url": "49ers.com",
+            "abbrev": ""
+        },
+        {
+            "id": 29,
+            "name": "Seattle Seahawks",
+            "url": "seahawks.com",
+            "abbrev": ""
+        },
+        {
+            "id": 30,
+            "name": "Tampa Bay Buccaneers",
+            "url": "buccaneers.com",
+            "abbrev": ""
+        },
+        {
+            "id": 31,
+            "name": "Tennessee Titans",
+            "url": "titansonline.com",
+            "abbrev": ""
+        },
+        {
+            "id": 32,
+            "name": "Washington Redskins",
+            "url": "redskins.com",
+            "abbrev": ""
+        }
+    ]
+}
