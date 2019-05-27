@@ -53,7 +53,7 @@ async function fetchTeam(team) {
     return players;
 }
 
-async function run(delay, runTimes) {
+async function run(runTimes, delay) {
     let response;
 
     while(runTimes) {
@@ -63,13 +63,14 @@ async function run(delay, runTimes) {
         totalTeamErrorsDetected = 0;
 
         response = await fetchTeams(teamsDB);
-        runTimes--;
-
+        
         //console.log('response:', JSON.stringify(response, undefined, 2));
         console.log('Scan completed in', Date.now() - startTime + 'ms');
         console.log('Total Teams Scanned:', totalTeamsScanned);
         console.log('Total Players Scanned:', totalPlayersScanned);
         console.log('Total Team Errors Detected:', totalTeamErrorsDetected);
+        
+        runTimes--;
 
         await timeout(delay);        
     }
@@ -77,18 +78,4 @@ async function run(delay, runTimes) {
     return response;
 }
 
-run(0, true).then(response => {
-    const playerMap = new Map();
-
-    response.forEach(players => {
-        players.forEach(player => {
-            if(!playerMap.has(player.name)) {
-                playerMap.set(player.name, [player]);
-            } else {
-                playerMap.get(player.name).push(player);
-            }
-        });
-    });
-
-    console.log(playerMap.get('Ryan Anderson'));
-});
+module.exports = run;
