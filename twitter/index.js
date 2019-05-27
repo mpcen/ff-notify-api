@@ -41,22 +41,28 @@ async function watchUsers(users) {
     return await Promise.all(promises).then(response => response);
 }
 
-async function run(delay) {
-    while(true) {
+async function run(runTimes, delay) {
+    let response;
+
+    while(runTimes) {
         let startTime = Date.now();
         totalSourcesScanned = 0;
         totalTweetsScanned = 0;
 
-        await timeout(delay);
-        const response = await watchUsers(users);
-
+        response = await watchUsers(users);
+        
         console.log('response:', JSON.stringify(response, undefined, 2));
         console.log('Scanning the following sources:', users);
         console.log('Scan completed in', Date.now() - startTime + 'ms');
         console.log('Total Sources Scanned:', totalSourcesScanned);
         console.log('Total Tweets Scanned:', totalTweetsScanned);
-        //return response;
+        
+        runTimes--;
+
+        await timeout(delay);
     }
+
+    return response;
 }
 
 const users = [
@@ -68,4 +74,4 @@ const users = [
     'patriots',
 ];
 
-run(500);
+module.exports = run;
