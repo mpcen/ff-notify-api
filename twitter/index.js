@@ -51,7 +51,7 @@ async function run(runTimes, delay) {
 
         response = await watchUsers(users);
         
-        console.log('response:', JSON.stringify(response, undefined, 2));
+        //console.log('response:', JSON.stringify(response, undefined, 2));
         console.log('Scanning the following sources:', users);
         console.log('Scan completed in', Date.now() - startTime + 'ms');
         console.log('Total Sources Scanned:', totalSourcesScanned);
