@@ -2,6 +2,7 @@ const cheerio = require('cheerio');
 const request = require('request-promise');
 
 const timeout = require('../util/timeout');
+const SOURCES = require('./sources');
 
 let totalSourcesScanned = 0;
 let totalTweetsScanned = 0;
@@ -32,7 +33,7 @@ async function fetchUser(username) {
     };
 }
 
-async function watchUsers(users) {
+async function watchSources(users) {
     const promises = [];
     await users.forEach(user => {
         promises.push(new Promise(resolve => fetchUser(user).then(response => resolve(response)) ))
@@ -49,10 +50,9 @@ async function run(runTimes, delay) {
         totalSourcesScanned = 0;
         totalTweetsScanned = 0;
 
-        response = await watchUsers(users);
+        response = await watchSources(SOURCES);
         
-        //console.log('response:', JSON.stringify(response, undefined, 2));
-        console.log('Scanning the following sources:', users);
+        console.log('Scanning the following sources:', SOURCES);
         console.log('Scan completed in', Date.now() - startTime + 'ms');
         console.log('Total Sources Scanned:', totalSourcesScanned);
         console.log('Total Tweets Scanned:', totalTweetsScanned);
@@ -64,14 +64,5 @@ async function run(runTimes, delay) {
 
     return response;
 }
-
-const users = [
-    'AdamSchefter',
-    'rotoworld_fb',
-    'BleacherReport',
-    'NFL',
-    'Seahawks',
-    'patriots',
-];
 
 module.exports = run;

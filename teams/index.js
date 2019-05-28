@@ -3,6 +3,7 @@ const request = require('request-promise');
 
 const teamsDB = require('./teams.json');
 const timeout = require('../util/timeout');
+const suffixSet = require('../util/suffixes');
 
 let totalTeamsScanned = 0;
 let totalTeamErrorsDetected = 0;
@@ -38,8 +39,20 @@ async function fetchTeam(team) {
     const players = [];
 
     $players.each((i, elem) => {
+        let playerName = $(elem).find('div span a').text();
+        let name_split = playerName.split(' ');
+        let maybeSuffix = name_split[name_split.length - 1];
+
+        if(!suffixSet.has(maybeSuffix)) {
+            maybeSuffix = '';
+        } else {
+            name_split.pop();
+            playerName = name_split.join(' ');
+        }
+
         const player = {
-            name: $(elem).find('div span a').text(),
+            name: playerName,
+            suffix: maybeSuffix,
             college: $(elem).next().next().next().next().next().next().next().text(),
             teamId: team.id,
             position: $(elem).next().next().text(),

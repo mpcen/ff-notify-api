@@ -2,8 +2,11 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
     "express": "^4.17.1",
+    "keyword-extractor": "^0.0.16",
     "nodemon": "^1.19.1",
     "request": "^2.88.0",
-    "request-promise": "^4.2.4"
+    "request-promise": "^4.2.4",
+    "retext": "^6.0.1",
+    "retext-keywords": "^4.0.2"
   }
 }

@@ -1,25 +1,50 @@
 const twitterService = require('./twitter');
 const teamsService = require('./teams');
 const buildPlayerMap = require('./players');
+const playerNewsService = require('./player-news-matcher');
+const timeout = require('./util/timeout');
 
 
 async function run(runTimes, delay) {
-    console.log('===========================');
-    console.log('TWEET SERVICE')
-    console.log('===========================');
+    while(runTimes) {
+        const startTime = Date.now();
+        console.log('===========================');
+        console.log('ROUND STARTED')
+        console.log('===========================');
+    
+        console.log('===========================');
+        console.log('TWEET SERVICE RUNNING')
+        console.log('===========================');
+    
+        const tweetData = await twitterService(1, 0);
 
-    const tweetData = await twitterService(runTimes, delay);
+        console.log('===========================');
+        console.log('TWEET SERVICE FINISHED')
+        console.log('===========================');
+    
+        console.log('===========================');
+        console.log('PLAYER SERVICE RUNNING')
+        console.log('===========================');
+    
+        const teams = await teamsService(1, 0);
+        const playerMap = buildPlayerMap(teams);
+        const playerNewsData = playerNewsService(playerMap, tweetData);
 
-    console.log('===========================');
-    console.log('PLAYER SERVICE')
-    console.log('===========================');
+        if(typeof runTimes === 'number') {
+            runTimes--;
+        }
 
-    const teams = await teamsService(runTimes, delay);
-    const playerMap = buildPlayerMap(teams);
+        console.log('===========================');
+        console.log('PLAYER SERVICE FINISHED')
+        console.log('===========================');
+    
+        console.log('************************************************');
+        console.log('ROUND FINISHED');
+        console.log('Run took', Date.now() - startTime + 'ms');
+        console.log('************************************************');
 
-    console.log('************************************************');
-    console.log('END OF SERVICE ITERATION');
-    console.log('************************************************');
+        await timeout(delay);
+    }
 }
 
 run(1, 0);
