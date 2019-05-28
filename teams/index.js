@@ -1,7 +1,7 @@
 const cheerio = require('cheerio');
 const request = require('request-promise');
 
-const teamsDB = require('../player-db/teams.json');
+const teamsDB = require('./teams.json');
 const timeout = require('../util/timeout');
 
 let totalTeamsScanned = 0;

@@ -18,6 +18,7 @@ async function run(runTimes, delay) {
     const playerMap = buildPlayerMap(teams);
 
     console.log('************************************************');
+    console.log('END OF SERVICE ITERATION');
     console.log('************************************************');
 }
 
