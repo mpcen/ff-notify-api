@@ -1,5 +1,3 @@
-const retext = require('retext');
-const keywords = require('retext-keywords');
 const keyword_extractor = require('keyword-extractor');
 
 function playerNewsService(playerMap, sources) {
@@ -13,9 +11,8 @@ function playerNewsService(playerMap, sources) {
                 remove_duplicates: false,
                 return_chained_words: true
             });
-
             let finalSentence = '';
-
+            
             extraction_result.forEach(sentence => {
                 sentence.split(' ').forEach(word => {
                     const charCode = word.charCodeAt(0);
@@ -34,7 +31,7 @@ function playerNewsService(playerMap, sources) {
 
                 if(finalSentence.search(regex) > -1) {
                     console.log('Latest News For:', name);
-                    console.log('  - ',sourceText);
+                    console.log('  - ', sourceText);
                     console.log();
                     break;
                 }

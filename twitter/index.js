@@ -7,7 +7,7 @@ const SOURCES = require('./sources');
 let totalSourcesScanned = 0;
 let totalTweetsScanned = 0;
 
-async function fetchUser(username) {
+async function fetchSource(username) {
     const BASE_URI = 'https://twitter.com/';
     const URL = `${BASE_URI}/${username}`;
     const $ = await request(URL).then(response => cheerio.load(response)).catch(err => err);
@@ -33,10 +33,10 @@ async function fetchUser(username) {
     };
 }
 
-async function watchSources(users) {
+async function fetchSources(sources) {
     const promises = [];
-    await users.forEach(user => {
-        promises.push(new Promise(resolve => fetchUser(user).then(response => resolve(response)) ))
+    await sources.forEach(source => {
+        promises.push(new Promise(resolve => fetchSource(source).then(response => resolve(response)) ))
     });
 
     return await Promise.all(promises).then(response => response);
@@ -50,7 +50,7 @@ async function run(runTimes, delay) {
         totalSourcesScanned = 0;
         totalTweetsScanned = 0;
 
-        response = await watchSources(SOURCES);
+        response = await fetchSources(SOURCES);
         
         console.log('Scanning the following sources:', SOURCES);
         console.log('Scan completed in', Date.now() - startTime + 'ms');
