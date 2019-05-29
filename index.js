@@ -3,28 +3,20 @@ const teamsService = require('./teams');
 const buildPlayerMap = require('./players');
 const playerNewsService = require('./player-news-matcher');
 const timeout = require('./util/timeout');
+const logger = require('./util/logger');
 
 
 async function run(runTimes, delay) {
     while(runTimes) {
         const startTime = Date.now();
-        console.log('===========================');
-        console.log('ROUND STARTED')
-        console.log('===========================');
-    
-        console.log('===========================');
-        console.log('TWEET SERVICE RUNNING')
-        console.log('===========================');
+        
+        logger('round started');
+        logger('tweet service running');
     
         const tweetData = await twitterService(1, 0);
 
-        console.log('===========================');
-        console.log('TWEET SERVICE FINISHED')
-        console.log('===========================');
-    
-        console.log('===========================');
-        console.log('PLAYER SERVICE RUNNING')
-        console.log('===========================');
+        logger('tweet service finished');
+        logger('player service running');
     
         const teams = await teamsService(1, 0);
         const playerMap = buildPlayerMap(teams);
@@ -34,15 +26,10 @@ async function run(runTimes, delay) {
             runTimes--;
         }
 
-        console.log('===========================');
-        console.log('PLAYER SERVICE FINISHED')
-        console.log('===========================');
+        logger('player service finished');
+        logger('round finished');
     
-        console.log('************************************************');
-        console.log('ROUND FINISHED');
         console.log('Run took', Date.now() - startTime + 'ms');
-        console.log('************************************************');
-
         await timeout(delay);
     }
 }
