@@ -33,7 +33,7 @@ async function run(runTimes, delay) {
 
         const recentRelevantNewsCollection = require('./data/recentRelevantNewsCollection.json');
         
-
+        console.log(recentRelevantNewsCollection);
 
 
 
