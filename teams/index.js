@@ -4,6 +4,8 @@ const request = require('request-promise');
 const teamsDB = require('./teams.json');
 const timeout = require('../util/timeout');
 const suffixSet = require('../util/suffixes');
+const logger = require('../util/logger');
+const buildPlayerMap = require('../players');
 
 let totalTeamsScanned = 0;
 let totalTeamErrorsDetected = 0;
@@ -67,6 +69,8 @@ async function fetchTeam(team) {
 }
 
 async function run(runTimes, delay) {
+    logger('player collection service running');
+
     let response;
 
     while(runTimes) {
@@ -78,17 +82,18 @@ async function run(runTimes, delay) {
         response = await fetchTeams(teamsDB);
         
         //console.log('response:', JSON.stringify(response, undefined, 2));
-        console.log('Scan completed in', Date.now() - startTime + 'ms');
+        console.log('Player Collection Scan completed in', Date.now() - startTime + 'ms');
         console.log('Total Teams Scanned:', totalTeamsScanned);
         console.log('Total Players Scanned:', totalPlayersScanned);
         console.log('Total Team Errors Detected:', totalTeamErrorsDetected);
+        console.log();
         
         runTimes--;
 
         await timeout(delay);        
     }
-
-    return response;
+    
+    return buildPlayerMap(response);
 }
 
 module.exports = run;

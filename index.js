@@ -1,6 +1,9 @@
-const twitterService = require('./twitter');
-const teamsService = require('./teams');
-const buildPlayerMap = require('./players');
+const fs = require('fs');
+const { promisify } = require('util');
+
+const writeFileAsync = promisify(fs.writeFile);
+const recentNewsService = require('./recentNews');
+const playerCollectionService = require('./teams');
 const playerNewsService = require('./player-news-matcher');
 const timeout = require('./util/timeout');
 const logger = require('./util/logger');
@@ -8,28 +11,40 @@ const logger = require('./util/logger');
 
 async function run(runTimes, delay) {
     while(runTimes) {
-        const startTime = Date.now();
-        
+        console.log('=======================================================================================')
         logger('round started');
-        logger('tweet service running');
-    
-        const tweetData = await twitterService(1, 0);
+        const roundStartTime = Date.now();
+        
+        // const [
+        //     recentNewsCollection,
+        //     rosteredPlayerCollection
+        // ] = await Promise.all([
+        //     recentNewsService(1, 0),
+        //     playerCollectionService(1, 0)
+        // ]);
+        // const recentRelevantNewsCollection = playerNewsService(
+        //     rosteredPlayerCollection,
+        //     recentNewsCollection
+        // );
 
-        logger('tweet service finished');
-        logger('player service running');
-    
-        const teams = await teamsService(1, 0);
-        const playerMap = buildPlayerMap(teams);
-        const playerNewsData = playerNewsService(playerMap, tweetData);
+        //await writeFileAsync('./data/recentRelevantNewsCollection.json', JSON.stringify(recentRelevantNewsCollection));
 
-        if(typeof runTimes === 'number') {
-            runTimes--;
-        }
+        // const recentRelevantNewsCollection = recentRelevantNewsCollectionJSON;
 
-        logger('player service finished');
-        logger('round finished');
-    
-        console.log('Run took', Date.now() - startTime + 'ms');
+        const recentRelevantNewsCollection = require('./data/recentRelevantNewsCollection.json');
+        
+
+
+
+
+
+
+        if(typeof runTimes === 'number') runTimes--;
+        console.log('Run took', Date.now() - roundStartTime + 'ms');
+        console.log();
+        console.log('* ROUND FINISHED');
+        console.log('=======================================================================================')
+        console.log();console.log();
         await timeout(delay);
     }
 }

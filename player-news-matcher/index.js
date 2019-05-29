@@ -1,6 +1,9 @@
 const keyword_extractor = require('keyword-extractor');
 
 function playerNewsService(playerMap, sources) {
+    const startTime = Date.now();
+    const recentRelevantNewsCollection = [];
+
     sources.forEach(source => {
         source.tweets.forEach(tweet => {
             const sourceText = tweet.content;
@@ -30,14 +33,22 @@ function playerNewsService(playerMap, sources) {
                 const regex = new RegExp(name, 'g');
 
                 if(finalSentence.search(regex) > -1) {
-                    console.log('Latest News For:', name);
-                    console.log('  - ', sourceText);
-                    console.log();
+                    recentRelevantNewsCollection.push({
+                        player: name,
+                        newsText: sourceText
+                    });
+
                     break;
                 }
             }
         });
     });
+
+    console.log('Player News Service completed in', Date.now() - startTime + 'ms');
+    console.log('Total news articles returned :', recentRelevantNewsCollection.length);
+    console.log();
+
+    return recentRelevantNewsCollection;
 }
 
 module.exports = playerNewsService;

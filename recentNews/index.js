@@ -3,6 +3,7 @@ const request = require('request-promise');
 
 const timeout = require('../util/timeout');
 const SOURCES = require('./sources');
+const logger = require('../util/logger');
 
 let totalSourcesScanned = 0;
 let totalTweetsScanned = 0;
@@ -46,16 +47,18 @@ async function run(runTimes, delay) {
     let response;
 
     while(runTimes) {
+        logger('recent news service running');
+
         let startTime = Date.now();
         totalSourcesScanned = 0;
         totalTweetsScanned = 0;
 
         response = await fetchSources(SOURCES);
         
-        console.log('Scanning the following sources:', SOURCES);
-        console.log('Scan completed in', Date.now() - startTime + 'ms');
-        console.log('Total Sources Scanned:', totalSourcesScanned);
-        console.log('Total Tweets Scanned:', totalTweetsScanned);
+        console.log('Recent News Scan completed in', Date.now() - startTime + 'ms');
+        console.log('Total Recent News Sources:', totalSourcesScanned);
+        console.log('Total News Posts:', totalTweetsScanned);
+        console.log();
         
         runTimes--;
 
