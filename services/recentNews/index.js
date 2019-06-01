@@ -1,7 +1,8 @@
 const cheerio = require('cheerio');
 const request = require('request-promise');
-//const axios = require('axios');
+const axios = require('axios');
 
+const Logger = require('../../util/logger');
 const util_timeout = require('../../util/timeout');
 const RECENT_NEWS_SOURCES = require('./sources');
 
@@ -15,14 +16,14 @@ class RecentNewsService {
         let response;
 
         while(runTimes) {
-            let startTime = Date.now();
+            let startTime = Logger.time();
 
             this.totalSourcesScanned = 0;
             this.totalTweetsScanned = 0;
 
-            response = await this.fetchSources(RECENT_NEWS_SOURCES);
+            response = await this.fetchRecentNews(RECENT_NEWS_SOURCES);
 
-            console.log('Recent News Scan completed in', Date.now() - startTime + 'ms');
+            Logger.logRuntime('Recent News Scan completed in', startTime);
             console.log('Total Recent News Sources:', this.totalSourcesScanned);
             console.log('Total News Posts:', this.totalTweetsScanned);
             console.log();
@@ -32,14 +33,22 @@ class RecentNewsService {
             await util_timeout(delay);
         }
 
+        console.log('response:', response);
+
+        await axios.post('http://localhost:5000/recentNews', response);
+
         return response;
     }
 
-    async fetchSources(RECENT_NEWS_SOURCES) {
+    async fetchRecentNews(RECENT_NEWS_SOURCES) {
         const promises = [];
 
         await RECENT_NEWS_SOURCES.forEach(RECENT_NEWS_SOURCE => {
-            promises.push(new Promise(resolve => this.fetchSource(RECENT_NEWS_SOURCE).then(response => resolve(response))));
+            promises.push(
+                new Promise((resolve, reject) => this.fetchSource(RECENT_NEWS_SOURCE)
+                    .then(response => resolve(response)))
+                    .catch(err => reject(err))
+            );
         });
 
         return await Promise.all(promises).then(response => response);

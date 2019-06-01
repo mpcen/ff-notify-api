@@ -8,7 +8,6 @@ const RecentPlayerNewsService = require('./services/RecentPlayerNews');
 const util_timeout = require('./util/timeout');
 const Logger = require('./util/logger');
 
-
 async function run(runTimes, delay, options) {
     while(runTimes) {
         const startTime = Logger.time();

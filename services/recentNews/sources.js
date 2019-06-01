@@ -1,6 +1,6 @@
 module.exports = [
-    'TeamMouseplay'
-    // 'AdamSchefter',
+    'TeamMouseplay',
+    'AdamSchefter'
     // 'rotoworld_fb',
     // 'BleacherReport',
     // 'ProFootballTalk',
