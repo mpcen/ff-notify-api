@@ -1,10 +1,10 @@
 const keyword_extractor = require('keyword-extractor');
 
-function playerNewsService(playerMap, sources) {
+function RecentPlayerNews(players, news) {
     const startTime = Date.now();
     const recentRelevantNewsCollection = [];
 
-    sources.forEach(source => {
+    news.forEach(source => {
         source.tweets.forEach(tweet => {
             const sourceText = tweet.content;
             const extraction_result = keyword_extractor.extract(sourceText, {
@@ -26,7 +26,7 @@ function playerNewsService(playerMap, sources) {
                 });
             });
             
-            const playerNames = [...playerMap.keys()];
+            const playerNames = [...players.keys()];
 
             for(let i = 0; i < playerNames.length; i++) {
                 const name = playerNames[i];
@@ -51,4 +51,4 @@ function playerNewsService(playerMap, sources) {
     return recentRelevantNewsCollection;
 }
 
-module.exports = playerNewsService;
+module.exports = RecentPlayerNews;

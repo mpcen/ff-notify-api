@@ -2,9 +2,9 @@
 //const { promisify } = require('util');
 //const writeFileAsync = promisify(fs.writeFile);
 
-const RecentNewsCollectionService = require('./services/recentNews');
-const PlayerCollectionService = require('./services/playerCollection');
-const playerNewsService = require('./services/playerNews');
+const RecentNewsService = require('./services/RecentNews');
+const PlayerService = require('./services/Player');
+const RecentPlayerNewsService = require('./services/RecentPlayerNews');
 const timeout = require('./util/timeout');
 const logger = require('./util/logger');
 
@@ -15,18 +15,12 @@ async function run({ runTimes, delay }) {
         logger('round started');
         const roundStartTime = Date.now();
         
-        const [
-            recentNewsCollection,
-            rosteredPlayerCollection
-        ] = await Promise.all([
-            new RecentNewsCollectionService().run(1,0),
-            new PlayerCollectionService().run(1, 0)
+        const [ news, players ] = await Promise.all([
+            new RecentNewsService().run(runTimes, delay),
+            new PlayerService().run(runTimes, delay)
         ]);
 
-        const recentRelevantNewsCollection = playerNewsService(
-            rosteredPlayerCollection,
-            recentNewsCollection
-        );
+        const recentRelevantNewsCollection = RecentPlayerNewsService(players, news);
 
         //await writeFileAsync('./data/recentRelevantNewsCollection.json', JSON.stringify(recentRelevantNewsCollection));
         // const recentRelevantNewsCollection = recentRelevantNewsCollectionJSON;
