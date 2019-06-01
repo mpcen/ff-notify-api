@@ -2,7 +2,7 @@ const cheerio = require('cheerio');
 const request = require('request-promise');
 
 const TEAMS_NFL_COM = require('./teams.json');
-const timeout = require('../../util/timeout');
+const util_timeout = require('../../util/timeout');
 const util_suffixes = require('../../util/suffixes');
 
 class PlayerCollectionService {
@@ -31,9 +31,8 @@ class PlayerCollectionService {
             
             runTimes--;
     
-            await timeout(delay);        
+            await util_timeout(delay);        
         }
-        
         
         return this.buildPlayerMap(this.response);
     }
