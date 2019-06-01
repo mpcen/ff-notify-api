@@ -12,7 +12,7 @@ class PlayerCollectionService {
         this.totalTeamErrorsDetected = 0;
     }
 
-    async run(runTimes, delay) {
+    async run({ runTimes, delay }) {
         let response;
 
         while(runTimes) {

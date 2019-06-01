@@ -1,6 +1,6 @@
 const cheerio = require('cheerio');
 const request = require('request-promise');
-const axios = require('axios');
+//const axios = require('axios');
 
 const util_timeout = require('../../util/timeout');
 const RECENT_NEWS_SOURCES = require('./sources');
@@ -11,7 +11,7 @@ class RecentNewsService {
         this.totalTweetsScanned = 0;
     }
 
-    async run(runTimes, delay) {
+    async run({runTimes, delay }) {
         let response;
 
         while(runTimes) {

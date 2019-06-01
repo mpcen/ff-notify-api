@@ -5,43 +5,45 @@
 const RecentNewsService = require('./services/RecentNews');
 const PlayerService = require('./services/Player');
 const RecentPlayerNewsService = require('./services/RecentPlayerNews');
-const timeout = require('./util/timeout');
-const logger = require('./util/logger');
+const util_timeout = require('./util/timeout');
+const Logger = require('./util/logger');
 
 
-async function run({ runTimes, delay }) {
+async function run(runTimes, delay, options) {
     while(runTimes) {
-        console.log('=======================================================================================')
-        logger('round started');
-        const roundStartTime = Date.now();
+        const startTime = Logger.time();
+        Logger.logHeader();
         
         const [ news, players ] = await Promise.all([
-            new RecentNewsService().run(runTimes, delay),
-            new PlayerService().run(runTimes, delay)
+            new RecentNewsService().run(options.recentNewsServiceOptions),
+            new PlayerService().run(options.playerServiceOptions)
         ]);
 
-        const recentRelevantNewsCollection = RecentPlayerNewsService(players, news);
+        RecentPlayerNewsService(players, news);
 
         //await writeFileAsync('./data/recentRelevantNewsCollection.json', JSON.stringify(recentRelevantNewsCollection));
         // const recentRelevantNewsCollection = recentRelevantNewsCollectionJSON;
         //const recentRelevantNewsCollection = require('./data/recentRelevantNewsCollection.json');
         
-
-
-
         if(typeof runTimes === 'number') runTimes--;
-        console.log('Run took', Date.now() - roundStartTime + 'ms');
-        console.log();
-        console.log('* ROUND FINISHED');
-        console.log('=======================================================================================')
-        console.log();console.log();
-        await timeout(delay);
+
+        Logger.logRuntime('Run took', startTime);
+        Logger.logFooter();
+        await util_timeout(delay);
     }
 }
 
 const options = {
-    runTimes: 1,
-    delay: 0
+    recentNewsServiceOptions: {
+        runTimes: 1,
+        delay: 0
+    },
+    playerServiceOptions: {
+        runTimes: 1,
+        delay: 0
+    }
 };
 
-run(options);
+
+
+run(1, 0, options);
