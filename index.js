@@ -1,10 +1,10 @@
-const fs = require('fs');
-const { promisify } = require('util');
+//const fs = require('fs');
+//const { promisify } = require('util');
+//const writeFileAsync = promisify(fs.writeFile);
 
-const writeFileAsync = promisify(fs.writeFile);
-const recentNewsService = require('./recentNews');
-const playerCollectionService = require('./teams');
-const playerNewsService = require('./player-news-matcher');
+const recentNewsService = require('./services/recentNews');
+const playerCollectionService = require('./services/playerCollection');
+const playerNewsService = require('./services/playerNews');
 const timeout = require('./util/timeout');
 const logger = require('./util/logger');
 
@@ -14,28 +14,24 @@ async function run(runTimes, delay) {
         console.log('=======================================================================================')
         logger('round started');
         const roundStartTime = Date.now();
-        
-        // const [
-        //     recentNewsCollection,
-        //     rosteredPlayerCollection
-        // ] = await Promise.all([
-        //     recentNewsService(1, 0),
-        //     playerCollectionService(1, 0)
-        // ]);
-        // const recentRelevantNewsCollection = playerNewsService(
-        //     rosteredPlayerCollection,
-        //     recentNewsCollection
-        // );
+
+
+        const [
+            recentNewsCollection,
+            rosteredPlayerCollection
+        ] = await Promise.all([
+            recentNewsService(1, 0),
+            playerCollectionService(1, 0)
+        ]);
+        const recentRelevantNewsCollection = playerNewsService(
+            rosteredPlayerCollection,
+            recentNewsCollection
+        );
 
         //await writeFileAsync('./data/recentRelevantNewsCollection.json', JSON.stringify(recentRelevantNewsCollection));
-
         // const recentRelevantNewsCollection = recentRelevantNewsCollectionJSON;
-
-        const recentRelevantNewsCollection = require('./data/recentRelevantNewsCollection.json');
+        //const recentRelevantNewsCollection = require('./data/recentRelevantNewsCollection.json');
         
-        console.log(recentRelevantNewsCollection);
-
-
 
 
 
@@ -49,4 +45,4 @@ async function run(runTimes, delay) {
     }
 }
 
-run(1, 0);
+run(3, 500);

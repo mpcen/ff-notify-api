@@ -2,10 +2,9 @@ const cheerio = require('cheerio');
 const request = require('request-promise');
 
 const teamsDB = require('./teams.json');
-const timeout = require('../util/timeout');
-const suffixSet = require('../util/suffixes');
-const logger = require('../util/logger');
-const buildPlayerMap = require('../players');
+const timeout = require('../../util/timeout');
+const suffixSet = require('../../util/suffixes');
+const logger = require('../../util/logger');
 
 let totalTeamsScanned = 0;
 let totalTeamErrorsDetected = 0;
@@ -68,9 +67,23 @@ async function fetchTeam(team) {
     return players;
 }
 
-async function run(runTimes, delay) {
-    logger('player collection service running');
+function buildPlayerMap(teams) {
+    const playerMap = new Map();
 
+    teams.forEach(players => {
+        players.forEach(player => {
+            if(!playerMap.has(player.name)) {
+                playerMap.set(player.name, [player]);
+            } else {
+                playerMap.get(player.name).push(player);
+            }
+        });
+    });
+    
+    return playerMap;
+}
+
+async function run(runTimes, delay) {
     let response;
 
     while(runTimes) {
@@ -92,6 +105,7 @@ async function run(runTimes, delay) {
 
         await timeout(delay);        
     }
+    
     
     return buildPlayerMap(response);
 }
