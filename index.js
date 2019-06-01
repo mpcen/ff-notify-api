@@ -3,7 +3,7 @@
 //const writeFileAsync = promisify(fs.writeFile);
 
 const recentNewsService = require('./services/recentNews');
-const playerCollectionService = require('./services/playerCollection');
+const PlayerCollectionService = require('./services/playerCollection');
 const playerNewsService = require('./services/playerNews');
 const timeout = require('./util/timeout');
 const logger = require('./util/logger');
@@ -15,14 +15,16 @@ async function run(runTimes, delay) {
         logger('round started');
         const roundStartTime = Date.now();
 
-
+        const playerCollectionService = new PlayerCollectionService();
+        
         const [
             recentNewsCollection,
             rosteredPlayerCollection
         ] = await Promise.all([
             recentNewsService(1, 0),
-            playerCollectionService(1, 0)
+            playerCollectionService.run(1, 0)
         ]);
+
         const recentRelevantNewsCollection = playerNewsService(
             rosteredPlayerCollection,
             recentNewsCollection
@@ -45,4 +47,4 @@ async function run(runTimes, delay) {
     }
 }
 
-run(3, 500);
+run(1, 0);
