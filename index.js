@@ -9,20 +9,18 @@ const timeout = require('./util/timeout');
 const logger = require('./util/logger');
 
 
-async function run(runTimes, delay) {
+async function run({ runTimes, delay }) {
     while(runTimes) {
         console.log('=======================================================================================')
         logger('round started');
         const roundStartTime = Date.now();
-
-        const playerCollectionService = new PlayerCollectionService();
         
         const [
             recentNewsCollection,
             rosteredPlayerCollection
         ] = await Promise.all([
             recentNewsService(1, 0),
-            playerCollectionService.run(1, 0)
+            new PlayerCollectionService().run(1, 0)
         ]);
 
         const recentRelevantNewsCollection = playerNewsService(
@@ -47,4 +45,9 @@ async function run(runTimes, delay) {
     }
 }
 
-run(1, 0);
+const options = {
+    runTimes: 1,
+    delay: 0
+};
+
+run(options);
