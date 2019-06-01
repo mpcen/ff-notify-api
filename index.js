@@ -2,7 +2,7 @@
 //const { promisify } = require('util');
 //const writeFileAsync = promisify(fs.writeFile);
 
-const recentNewsService = require('./services/recentNews');
+const RecentNewsCollectionService = require('./services/recentNews');
 const PlayerCollectionService = require('./services/playerCollection');
 const playerNewsService = require('./services/playerNews');
 const timeout = require('./util/timeout');
@@ -19,7 +19,7 @@ async function run({ runTimes, delay }) {
             recentNewsCollection,
             rosteredPlayerCollection
         ] = await Promise.all([
-            recentNewsService(1, 0),
+            new RecentNewsCollectionService().run(1,0),
             new PlayerCollectionService().run(1, 0)
         ]);
 

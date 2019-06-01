@@ -10,17 +10,18 @@ class PlayerCollectionService {
         this.totalTeamsScanned = 0;
         this.totalPlayersScanned = 0;
         this.totalTeamErrorsDetected = 0;
-        this.response = {};
     }
 
     async run(runTimes, delay) {
+        let response;
+
         while(runTimes) {
             let startTime = Date.now();
             this.totalTeamsScanned = 0;
             this.totalPlayersScanned = 0;
             this.totalTeamErrorsDetected = 0;
     
-            this.response = await this.fetchPlayers(TEAMS_NFL_COM);
+            response = await this.fetchPlayers(TEAMS_NFL_COM);
             
             //console.log('response:', JSON.stringify(response, undefined, 2));
             console.log('Player Collection Scan completed in', Date.now() - startTime + 'ms');
@@ -34,7 +35,7 @@ class PlayerCollectionService {
             await util_timeout(delay);        
         }
         
-        return this.buildPlayerMap(this.response);
+        return this.buildPlayerMap(response);
     }
 
     async fetchPlayers(TEAMS_NFL_COM) {
