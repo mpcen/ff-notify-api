@@ -13,7 +13,7 @@ class RecentNewsService {
     }
 
     async run({runTimes, delay }) {
-        let response;
+        let recentNews;
 
         while(runTimes) {
             let startTime = Logger.time();
@@ -21,7 +21,7 @@ class RecentNewsService {
             this.totalSourcesScanned = 0;
             this.totalTweetsScanned = 0;
 
-            response = await this.fetchRecentNews(RECENT_NEWS_SOURCES);
+            recentNews = await this.fetchRecentNews(RECENT_NEWS_SOURCES);
 
             Logger.logRuntime('Recent News Scan completed in', startTime);
             console.log('Total Recent News Sources:', this.totalSourcesScanned);
@@ -33,11 +33,16 @@ class RecentNewsService {
             await util_timeout(delay);
         }
 
-        console.log('response:', response);
+        //console.log('response:', response);
 
-        await axios.post('http://localhost:5000/recentNews', response);
+        //await axios.get('http://localhost:5000/recentNews');
 
-        return response;
+        await axios.post('http://localhost:5000/recentNews', {
+            name: 'twitter',
+            recentNews
+        });
+
+        return recentNews;
     }
 
     async fetchRecentNews(RECENT_NEWS_SOURCES) {
@@ -66,10 +71,10 @@ class RecentNewsService {
         _tweets.each((i, elem) => {
             this.totalTweetsScanned++;
     
-            tweets.push({
-                time: $(elem).find('.stream-item-header .time .tweet-timestamp').text(),
-                content: $(elem).find('.js-tweet-text-container .TweetTextSize').text()
-            });
+            const time = $(elem).find('.stream-item-header .time .tweet-timestamp').attr('title');
+            const content = $(elem).find('.js-tweet-text-container .TweetTextSize').text();
+
+            if(time && content) tweets.push({ time, content });
         });
     
         return {

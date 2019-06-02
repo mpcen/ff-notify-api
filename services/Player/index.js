@@ -9,7 +9,6 @@ class PlayerCollectionService {
     constructor() {
         this.totalTeamsScanned = 0;
         this.totalPlayersScanned = 0;
-        this.totalTeamErrorsDetected = 0;
     }
 
     async run({ runTimes, delay }) {
@@ -19,7 +18,6 @@ class PlayerCollectionService {
             let startTime = Date.now();
             this.totalTeamsScanned = 0;
             this.totalPlayersScanned = 0;
-            this.totalTeamErrorsDetected = 0;
     
             response = await this.fetchPlayers(TEAMS_NFL_COM);
             
@@ -27,7 +25,6 @@ class PlayerCollectionService {
             console.log('Player Collection Scan completed in', Date.now() - startTime + 'ms');
             console.log('Total Teams Scanned:', this.totalTeamsScanned);
             console.log('Total Players Scanned:', this.totalPlayersScanned);
-            console.log('Total Team Errors Detected:', this.totalTeamErrorsDetected);
             console.log();
             
             runTimes--;
@@ -49,10 +46,7 @@ class PlayerCollectionService {
                             this.totalTeamsScanned++;
                             resolve(response)
                         })
-                        .catch(err => {
-                            this.totalTeamErrorsDetected++;
-                            reject(err)
-                        });
+                        .catch(err => reject(err));
                 })
             );
         });

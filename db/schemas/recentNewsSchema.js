@@ -13,7 +13,8 @@ const TwitterSchema = new Schema({
 });
 
 const RecentNewsSchema = new Schema({
-    twitter: [TwitterSchema]
+    name: String,
+    recentNews: [TwitterSchema]
 });
 
 module.exports = RecentNewsSchema;

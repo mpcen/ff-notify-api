@@ -1,6 +1,4 @@
-//const fs = require('fs');
-//const { promisify } = require('util');
-//const writeFileAsync = promisify(fs.writeFile);
+
 
 const RecentNewsService = require('./services/RecentNews');
 const PlayerService = require('./services/Player');
@@ -20,10 +18,6 @@ async function run(runTimes, delay, options) {
 
         RecentPlayerNewsService(players, news);
 
-        //await writeFileAsync('./data/recentRelevantNewsCollection.json', JSON.stringify(recentRelevantNewsCollection));
-        // const recentRelevantNewsCollection = recentRelevantNewsCollectionJSON;
-        //const recentRelevantNewsCollection = require('./data/recentRelevantNewsCollection.json');
-        
         if(typeof runTimes === 'number') runTimes--;
 
         Logger.logRuntime('Run took', startTime);
@@ -46,3 +40,11 @@ const options = {
 
 
 run(1, 0, options);
+
+//const fs = require('fs');
+//const { promisify } = require('util');
+//const writeFileAsync = promisify(fs.writeFile);
+
+//await writeFileAsync('./data/recentRelevantNewsCollection.json', JSON.stringify(recentRelevantNewsCollection));
+// const recentRelevantNewsCollection = recentRelevantNewsCollectionJSON;
+//const recentRelevantNewsCollection = require('./data/recentRelevantNewsCollection.json');
