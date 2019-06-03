@@ -1,20 +1,22 @@
 const { Schema } = require('mongoose');
 
 const TweetSchema = new Schema({
+    id: String,
     time: String,
     content: String
 });
 
-const TwitterSchema = new Schema({
+const TwitterUserSchema = new Schema({
     name: String,
     username: String,
     verified: Boolean,
-    tweets: [TweetSchema]
+    tweets: [TweetSchema],
+    lastActivityTime: String
 });
 
 const RecentNewsSchema = new Schema({
     name: String,
-    recentNews: [TwitterSchema]
+    recentNews: [TwitterUserSchema]
 });
 
 module.exports = RecentNewsSchema;

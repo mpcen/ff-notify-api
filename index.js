@@ -1,5 +1,3 @@
-
-
 const RecentNewsService = require('./services/RecentNews');
 const PlayerService = require('./services/Player');
 const RecentPlayerNewsService = require('./services/RecentPlayerNews');
@@ -39,7 +37,7 @@ const options = {
 
 
 
-run(1, 0, options);
+run(true, 0, options);
 
 //const fs = require('fs');
 //const { promisify } = require('util');
