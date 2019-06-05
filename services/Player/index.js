@@ -1,5 +1,6 @@
 const cheerio = require('cheerio');
 const request = require('request-promise');
+const axios = require('axios');
 
 const TEAMS_NFL_COM = require('./teams.json');
 const util_timeout = require('../../util/timeout');
@@ -19,20 +20,35 @@ class PlayerCollectionService {
             this.totalTeamsScanned = 0;
             this.totalPlayersScanned = 0;
     
-            response = await this.fetchPlayers(TEAMS_NFL_COM);
-            
-            //console.log('response:', JSON.stringify(response, undefined, 2));
-            console.log('Player Collection Scan completed in', Date.now() - startTime + 'ms');
-            console.log('Total Teams Scanned:', this.totalTeamsScanned);
-            console.log('Total Players Scanned:', this.totalPlayersScanned);
-            console.log();
-            
-            runTimes--;
-    
-            await util_timeout(delay);        
+            try {
+                response = await this.fetchPlayers(TEAMS_NFL_COM);
+
+                //console.log('response:', JSON.stringify(response, undefined, 2));
+                console.log('Player Collection Scan completed in', Date.now() - startTime + 'ms');
+                console.log('Total Teams Scanned:', this.totalTeamsScanned);
+                console.log('Total Players Scanned:', this.totalPlayersScanned);
+                console.log();
+                
+                runTimes--;
+        
+                await util_timeout(delay); 
+            } catch(e) {
+                // Prob wanna throw something so api can catch it
+                console.log('Error from within PlayerCollectionService run:', e);
+                return {};
+            }
         }
         
-        return this.buildPlayerMap(response);
+        const players = this.flattenPlayers(response);
+
+        try {
+            await axios.post('http://localhost:5000/players', players);
+            return players;
+        } catch(e) {
+            // Prob wanna throw something so api can catch it
+            console.log('Error in PlayerServices run:', e);
+            return {};
+        }
     }
 
     async fetchPlayers(TEAMS_NFL_COM) {
@@ -51,47 +67,62 @@ class PlayerCollectionService {
             );
         });
         
-        return await Promise.all(promises).then(response => response);
+        try {
+            const response = await Promise.all(promises).then(response => response);
+            return response;
+        } catch(e) {
+            // Prob wanna throw something so api can catch it
+            console.log('Error in fetchPlayers:', e);
+            return {};
+        }
     }
 
     async fetchNFLPlayer(team) {
         const ROUTE = 'team/players-roster/';
         const URL = `https://${team.url}/${ROUTE}`;
-        const $ = await request(URL).then(response => cheerio.load(response)).catch(err => err);
-        const $players =  $('table tbody tr').find('.sorter-lastname');
-        const players = [];
-    
-        $players.each((i, elem) => {
-            let playerName = $(elem).find('div span a').text();
-            let name_split = playerName.split(' ');
-            let maybeSuffix = name_split[name_split.length - 1];
-    
-            if(!util_suffixes.has(maybeSuffix)) {
-                maybeSuffix = '';
-            } else {
-                name_split.pop();
-                playerName = name_split.join(' ');
-            }
-    
-            const player = {
-                name: playerName,
-                suffix: maybeSuffix,
-                college: $(elem).next().next().next().next().next().next().next().text(),
-                teamId: team.id,
-                position: $(elem).next().next().text(),
-                number: $(elem).next().text(),
-            };
-    
-            this.totalPlayersScanned++;
 
-            players.push(player);
-        });
+        try {
+            const $ = await request(URL).then(response => cheerio.load(response)).catch(err => err);
+            const $players =  $('table tbody tr').find('.sorter-lastname');
+            const players = [];
         
-        return players;
+            $players.each((i, elem) => {
+                let playerName = $(elem).find('div span a').text();
+                let name_split = playerName.split(' ');
+                let maybeSuffix = name_split[name_split.length - 1];
+        
+                if(!util_suffixes.has(maybeSuffix)) {
+                    maybeSuffix = '';
+                } else {
+                    name_split.pop();
+                    playerName = name_split.join(' ');
+                }
+        
+                const player = {
+                    name: playerName,
+                    suffix: maybeSuffix,
+                    college: $(elem).next().next().next().next().next().next().next().text(),
+                    teamId: team.id,
+                    position: $(elem).next().next().text(),
+                    number: $(elem).next().text(),
+                };
+        
+                this.totalPlayersScanned++;
+
+                players.push(player);
+            });
+            
+            return players;
+        } catch(e) {
+            // Prob wanna throw something so api can catch it
+            console.log('Error in fetchNFLPlayer:', e);
+            return {};
+        }
     }
 
-    buildPlayerMap(teams) {
+    flattenPlayers(teams) {
         const playerMap = new Map();
+        const flattenedPlayers = [];
     
         teams.forEach(players => {
             players.forEach(player => {
@@ -102,8 +133,12 @@ class PlayerCollectionService {
                 }
             });
         });
-        
-        return playerMap;
+
+        playerMap.forEach(players => {
+            players.forEach(player => flattenedPlayers.push(player));
+        });
+
+        return flattenedPlayers;
     }
 }
 

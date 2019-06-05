@@ -8,8 +8,9 @@ mongoose.connection.on('err', console.error.bind(console, 'DB connection error:'
 mongoose.connection.once('open', () => console.log('Connected to DB'));
 
 const RecentNews = require('../db/models/RecentNews');
+const Players = require('../db/models/Players');
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '999kb' }));
 
 app.get('/recentNews', (req, res) => {
     RecentNews.find((err, response) => {
@@ -49,12 +50,28 @@ app.post('/recentNews', async (req, res) => {
     }
 
     res.sendStatus(200);
+});
 
-    // const recentNews = new RecentNews(req.body);
-    // recentNews.save((err, data) => {
-    //     console.log('Saved:', data);
-    //     res.sendStatus(200);
-    // });
+app.get('/players', async (req, res) => {
+    try {
+        const response = await Players.find();
+        res.send(response);
+    } catch(e) {
+        console.log('Error from GET /players:', e);
+        res.sendStatus(500);
+    }
+});
+
+app.post('/players', async (req, res) => {
+    const players = new Players({ players: req.body });
+
+    try {
+        await players.save();
+        res.sendStatus(200);
+    } catch(e) {
+        console.log('Error from POST /players:', e);
+        res.sendStatus(500);
+    }
 });
 
 app.listen(PORT, () => console.log('API Running on port', PORT));

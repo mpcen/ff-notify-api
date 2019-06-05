@@ -4,7 +4,9 @@ const Logger = require('../../util/logger');
 function RecentPlayerNews(players, news) {
     const startTime = Logger.time();
     const recentRelevantNewsCollection = [];
-    const playerNames = [...players.keys()];
+    const playerNames = [];
+
+    for(let playerName in playerNames) playerNames.push(playerName)
 
     news.forEach(source => {
         source.tweets.forEach(tweet => {

@@ -37,7 +37,7 @@ const options = {
 
 
 
-run(true, 0, options);
+run(1, 0, options);
 
 //const fs = require('fs');
 //const { promisify } = require('util');
