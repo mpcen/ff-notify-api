@@ -1,3 +1,4 @@
+
 const cheerio = require('cheerio');
 const request = require('request-promise');
 const axios = require('axios');
@@ -13,7 +14,7 @@ class PlayerCollectionService {
     }
 
     async run({ runTimes, delay }) {
-        let response;
+        let teamsWithPlayers;
 
         while(runTimes) {
             let startTime = Date.now();
@@ -21,37 +22,38 @@ class PlayerCollectionService {
             this.totalPlayersScanned = 0;
     
             try {
-                response = await this.fetchPlayers(TEAMS_NFL_COM);
-
-                //console.log('response:', JSON.stringify(response, undefined, 2));
-                console.log('Player Collection Scan completed in', Date.now() - startTime + 'ms');
-                console.log('Total Teams Scanned:', this.totalTeamsScanned);
-                console.log('Total Players Scanned:', this.totalPlayersScanned);
-                console.log();
-                
-                runTimes--;
-        
-                await util_timeout(delay); 
+                teamsWithPlayers = await this.fetchTeamsWithPlayers(TEAMS_NFL_COM);
             } catch(e) {
                 // Prob wanna throw something so api can catch it
                 console.log('Error from within PlayerCollectionService run:', e);
                 return {};
             }
-        }
-        
-        const players = this.flattenPlayers(response);
 
-        try {
-            await axios.post('http://localhost:5000/players', players);
-            return players;
-        } catch(e) {
-            // Prob wanna throw something so api can catch it
-            console.log('Error in PlayerServices run:', e);
-            return {};
+            //console.log('response:', JSON.stringify(response, undefined, 2));
+            console.log('Player Collection Scan completed in', Date.now() - startTime + 'ms');
+            console.log('Total Teams Scanned:', this.totalTeamsScanned);
+            console.log('Total Players Scanned:', this.totalPlayersScanned);
+            console.log();
+            
+            if(typeof runTimes === 'number') runTimes--;
+
+            await util_timeout(delay); 
+
+            const players = this.flattenPlayers(teamsWithPlayers);
+
+            try {
+                await axios.post('http://localhost:5000/players', players);
+            } catch(e) {
+                // Prob wanna throw something so api can catch it
+                console.log('Error in PlayerServices run:', e);
+                return {};
+            }
         }
+
+        return players;
     }
 
-    async fetchPlayers(TEAMS_NFL_COM) {
+    async fetchTeamsWithPlayers(TEAMS_NFL_COM) {
         const promises = [];
     
         TEAMS_NFL_COM.teams.forEach(team => {
@@ -72,7 +74,7 @@ class PlayerCollectionService {
             return response;
         } catch(e) {
             // Prob wanna throw something so api can catch it
-            console.log('Error in fetchPlayers:', e);
+            console.log('Error in fetchTeamsWithPlayers:', e);
             return {};
         }
     }
