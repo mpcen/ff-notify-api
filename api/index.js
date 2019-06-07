@@ -8,48 +8,36 @@ mongoose.connection.on('err', console.error.bind(console, 'DB connection error:'
 mongoose.connection.once('open', () => console.log('Connected to DB'));
 
 const RecentNews = require('../db/models/RecentNews');
+const RecentPlayerNews = require('../db/models/RecentPlayerNews');
 const Players = require('../db/models/Players');
 
 app.use(bodyParser.json({ limit: '999kb' }));
 
-app.get('/recentNews', (req, res) => {
-    RecentNews.find((err, response) => {
+app.get('/recentNews', async (req, res) => {
+    try {
+        const response = await RecentNews.find();
         res.send(response);
-    });
+    } catch(e) {
+        console.log('Error in GET /recentNews:', e);
+        res.sendStatus(500);
+    }
 });
 
 app.post('/recentNews', async (req, res) => {
-    const $twitter = await RecentNews.findOne({ 'name': 'twitter' });
-    const newTweets = [];
-
-    $twitter.recentNews.forEach($twitterUser => {
-        const twitterUser = req.body.recentNews.find(twitterUser => {
-            return $twitterUser.username === twitterUser.username;
-        });
-
-        const $tweets = $twitterUser.tweets;
-        
-        twitterUser.tweets.forEach(recentlyScrapedTweet => {
-            if(!$tweets.find($tweet => $tweet.id === recentlyScrapedTweet.id)) {
-                newTweets.push({ _id: $twitterUser._id, data: recentlyScrapedTweet });
-            }
-        });
+    const recentNews = new RecentNews({
+        name: 'twitter',
+        recentNews: req.body.recentNews
     });
-
-    if(newTweets.length) {
-        console.log('New Tweets:', newTweets);
-
-        newTweets.forEach(async newTweet => {
-            const $twitterUser = $twitter.recentNews.find($twitterUser => $twitterUser._id === newTweet._id);
-            $twitterUser.tweets.unshift(newTweet.data);
-        });
-
-        await $twitter.save();
-    } else {
-        console.log('No new tweets');
+        
+    try {
+        await recentNews.save();
+    } catch(e) {
+        console.log('Error from POST /recentNews:', e);
+        res.sendStatus(500);
     }
+    console.log('Stored new Twitter Data');
 
-    res.sendStatus(200);
+    return res.sendStatus(200);
 });
 
 app.get('/players', async (req, res) => {
@@ -70,6 +58,27 @@ app.post('/players', async (req, res) => {
         res.sendStatus(200);
     } catch(e) {
         console.log('Error from POST /players:', e);
+        res.sendStatus(500);
+    }
+});
+
+app.get('/recentPlayerNews', async (req, res) => {
+    try {
+        const response = await RecentPlayerNews.find();
+        res.send(response);
+    } catch(e) {
+        console.log('Error GET /recentPlayerNews:', e);
+        res.sendStatus(500);
+    }
+});
+
+app.post('/recentPlayerNews', async (req, res) => {
+    debugger;
+    try {
+        await RecentPlayerNews.create(req.body);
+        res.sendStatus(200);
+    } catch(e) {
+        console.log('Error in POST /recentPlayerNews:', e);
         res.sendStatus(500);
     }
 });

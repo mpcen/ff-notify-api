@@ -37,14 +37,19 @@ class RecentNewsService {
             console.log();
             
             if(typeof runTimes === 'number') runTimes--;
-
             
-            await axios.post('http://localhost:5000/recentNews', {
-                name: 'twitter',
-                recentNews
-            });
-            
-            await util_timeout(delay);
+            try {
+                await axios.post('http://localhost:5000/recentNews', {
+                    name: 'twitter',
+                    recentNews
+                });
+                
+                await util_timeout(delay);
+            } catch(e) {
+                // Prob wanna throw something so api can catch it
+                console.log('Error in RecentNewsService run:', e);
+                return [];
+            }
         }
 
         return recentNews;
