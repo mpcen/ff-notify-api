@@ -9,15 +9,18 @@ const util_dateTimeToUTC = require('../../util/dateTimeToUTC');
 const RECENT_NEWS_SOURCES = require('./sources');
 
 class RecentNewsService {
-    constructor() {
+    constructor(options) {
+        const { runTimes, delay } = options;
+        this.runTimes = runTimes;
+        this.delay = delay;
         this.totalSourcesScanned = 0;
         this.totalTweetsScanned = 0;
     }
 
-    async run({runTimes, delay }) {
+    async run() {
         let recentNews;
 
-        while(runTimes) {
+        while(this.runTimes) {
             let startTime = Logger.time();
 
             this.totalSourcesScanned = 0;
@@ -26,7 +29,6 @@ class RecentNewsService {
             try {
                 recentNews = await this.fetchRecentNews(RECENT_NEWS_SOURCES);
             } catch(e) {
-                // Prob wanna throw something so api can catch it
                 console.log('Error in RecentNewsService run:', e);
                 return [];
             }
@@ -36,7 +38,7 @@ class RecentNewsService {
             console.log('Total News Posts:', this.totalTweetsScanned);
             console.log();
             
-            if(typeof runTimes === 'number') runTimes--;
+            if(typeof this.runTimes === 'number') this.runTimes--;
             
             try {
                 await axios.post('http://localhost:5000/recentNews', {
@@ -44,9 +46,8 @@ class RecentNewsService {
                     recentNews
                 });
                 
-                await util_timeout(delay);
+                await util_timeout(this.delay);
             } catch(e) {
-                // Prob wanna throw something so api can catch it
                 console.log('Error in RecentNewsService run:', e);
                 return [];
             }
@@ -67,7 +68,6 @@ class RecentNewsService {
             });
             return await Promise.all(promises).then(response => response);
         } catch(e) {
-            // Prob wanna throw something so api can catch it
             console.log('Error in RecentNewsService fetchRecentNews:', e);
             return [];
         }

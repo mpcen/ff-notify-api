@@ -8,6 +8,7 @@ const TweetSchema = new Schema({
 
 const TwitterUserSchema = new Schema({
     name: String,
+    platform: { type: String, default: 'twitter' },
     username: String,
     verified: Boolean,
     tweets: [TweetSchema],

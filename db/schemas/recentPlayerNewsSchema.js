@@ -5,7 +5,8 @@ const RecentPlayerNewsSchema = new Schema({
     username: String,
     contentId: String,
     player: String,
-    content: String
+    content: String,
+    time: String
 });
 
 module.exports = RecentPlayerNewsSchema;

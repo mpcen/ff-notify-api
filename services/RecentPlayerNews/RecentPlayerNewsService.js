@@ -11,10 +11,10 @@ async function RecentPlayerNews(players, news) {
     players.forEach(player => playerNames.push(player.name));
 
     news.forEach(source => {
-        const { username } = source;
+        const { username, platform } = source;
 
         source.tweets.forEach(tweet => {
-            const { content, id } = tweet;
+            const { content, id, time } = tweet;
             const extraction_result = keyword_extractor.extract(content, {
                 language: "english",
                 remove_digits: true,
@@ -30,11 +30,12 @@ async function RecentPlayerNews(players, news) {
 
                 if(finalSentence.search(regex) > -1) {
                     recentRelevantNewsCollection.push({
-                        platform: 'twitter',
+                        platform,
                         username,
                         contentId: id,
                         player: name,
-                        content
+                        content,
+                        time,
                     });
 
                     break;
@@ -43,18 +44,15 @@ async function RecentPlayerNews(players, news) {
         });
     });
 
-    Logger.logRuntime('Player News Service completed in', startTime);
-    console.log('Total news articles returned :', recentRelevantNewsCollection.length);
-    console.log(recentRelevantNewsCollection);
-    console.log();
-
     try {
         await axios.post('http://localhost:5000/recentPlayerNews', recentRelevantNewsCollection);
-        console.log('Stored:', recentRelevantNewsCollection.length, 'relevant player alerts')
     } catch(e) {
         console.log('Error in RecentPlayerNews:', e);
         return {};
     }
+
+    Logger.logRuntime('Player News Service completed in', startTime);
+    console.log();
 
     return recentRelevantNewsCollection;
 }

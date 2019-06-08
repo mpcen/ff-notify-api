@@ -73,9 +73,34 @@ app.get('/recentPlayerNews', async (req, res) => {
 });
 
 app.post('/recentPlayerNews', async (req, res) => {
-    debugger;
     try {
-        await RecentPlayerNews.create(req.body);
+        const $currentRecentPlayerNews = await RecentPlayerNews.find();
+        const newRecentPlayerNews = [];
+
+        if(!$currentRecentPlayerNews.length) {
+            await RecentPlayerNews.create(req.body);
+            await RecentNews.deleteOne();
+            console.log('Stored', req.body.length, 'new recent player news items');
+            return res.sendStatus(200);
+        }
+
+        req.body.forEach(incomingRecentPlayerNewsItem => {
+            const item = $currentRecentPlayerNews.find($currentRecentPlayerNewsItem => {
+                return $currentRecentPlayerNewsItem.platform === incomingRecentPlayerNewsItem.platform &&
+                    $currentRecentPlayerNewsItem.contentId === incomingRecentPlayerNewsItem.contentId
+            });
+
+            if(!item) newRecentPlayerNews.push(incomingRecentPlayerNewsItem);
+        });
+
+        if(newRecentPlayerNews.length) {
+            await RecentPlayerNews.insertMany(newRecentPlayerNews);
+            console.log('Stored', newRecentPlayerNews.length, 'new recent player news items');
+        } else {
+            console.log('No new recent player news');
+        }
+
+        await RecentNews.deleteOne();
         res.sendStatus(200);
     } catch(e) {
         console.log('Error in POST /recentPlayerNews:', e);
