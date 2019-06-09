@@ -5,6 +5,11 @@ const axios = require('axios');
     try {
         const playersResponse = await axios.get('http://localhost:5000/players');
         const recentNewsResponse = await axios.get('http://localhost:5000/recentnews');
+
+        if(!recentNewsResponse.data.length) {
+            console.log('No new recent news');
+            return;
+        }
         
         await RecentPlayerNewsService(
             playersResponse.data[0].players,

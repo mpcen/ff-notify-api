@@ -9,8 +9,7 @@ const util_dateTimeToUTC = require('../../util/dateTimeToUTC');
 const RECENT_NEWS_SOURCES = require('./sources');
 
 class RecentNewsService {
-    constructor(options) {
-        const { runTimes, delay } = options;
+    constructor({ runTimes, delay }) {
         this.runTimes = runTimes;
         this.delay = delay;
         this.totalSourcesScanned = 0;

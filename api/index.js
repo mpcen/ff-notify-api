@@ -55,11 +55,13 @@ app.post('/players', async (req, res) => {
 
     try {
         await players.save();
-        res.sendStatus(200);
+        console.log('Stored new Player Data');
     } catch(e) {
         console.log('Error from POST /players:', e);
-        res.sendStatus(500);
+        res.sendStatus(501);
     }
+
+    return res.sendStatus(200);
 });
 
 app.get('/recentPlayerNews', async (req, res) => {
