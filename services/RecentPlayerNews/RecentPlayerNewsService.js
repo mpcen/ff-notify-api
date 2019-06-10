@@ -3,7 +3,7 @@ const axios = require('axios');
 
 const Logger = require('../../util/logger');
 
-async function RecentPlayerNews(players, news) {
+async function RecentPlayerNews(news, players) {
     const startTime = Logger.time();
     const recentRelevantNewsCollection = [];
     const playerNames = [];

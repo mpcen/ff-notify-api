@@ -38,18 +38,20 @@ class RecentNewsService {
             console.log();
             
             if(typeof this.runTimes === 'number') this.runTimes--;
+
+            return recentNews;
             
-            try {
-                await axios.post('http://localhost:5000/recentNews', {
-                    name: 'twitter',
-                    recentNews
-                });
+            // try {
+            //     await axios.post('http://localhost:5000/recentNews', {
+            //         name: 'twitter',
+            //         recentNews
+            //     });
                 
-                await util_timeout(this.delay);
-            } catch(e) {
-                console.log('Error in RecentNewsService run:', e);
-                return [];
-            }
+            //     await util_timeout(this.delay);
+            // } catch(e) {
+            //     console.log('Error in RecentNewsService run:', e);
+            //     return [];
+            // }
         }
 
         return recentNews;
@@ -111,7 +113,8 @@ class RecentNewsService {
                 username: $('.ProfileHeaderCard-screenname a span').text(),
                 verified: $('.ProfileHeaderCard-name').children().length > 1,
                 lastActivityTime: tweets[0].time,
-                tweets
+                tweets,
+                platform: 'twitter'
             };
         } catch(e) {
             console.log('Error in RecentNewsService:', e);

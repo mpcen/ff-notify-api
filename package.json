@@ -1,8 +1,8 @@
 {
   "scripts": {
     "socket": "nodemon ./NotificationService/index.js",
-    "api": "nodemon ./api/index.js",
-    "service": "node index.js"
+    "api-dev": "nodemon ./api/index.js",
+    "service-dev": "nodemon ./services/index.js 3000"
   },
   "dependencies": {
     "axios": "^0.19.0",
@@ -17,5 +17,8 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "socket.io": "^2.2.0"
+  },
+  "devDependencies": {
+    "concurrently": "^4.1.0"
   }
 }
