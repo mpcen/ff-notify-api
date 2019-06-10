@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js run api-dev
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js run service-dev
 
 PATH: 
   ;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\iCLS\;C:\Program Files\Intel\Intel(R) Management Engine Components\iCLS\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\NVIDIA Corporation\NVIDIA NGX;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\Users\Manny\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files (x86)\Yarn\bin\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\Manny\.windows-build-tools\python27\;C:\Users\Manny\AppData\Roaming\nvm\v11.13.0\node_modules\npm\node_modules\npm-lifecycle\node-gyp-bin;C:\Program Files\nodejs\node_modules\windows-build-tools\node_modules\.bin;C:\Program Files\nodejs\node_modules\.bin;;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\iCLS\;C:\Program Files\Intel\Intel(R) Management Engine Components\iCLS\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\NVIDIA Corporation\NVIDIA NGX;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\Users\Manny\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files (x86)\Yarn\bin\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\Manny\AppData\Local\Microsoft\WindowsApps;C:\Users\Manny\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Manny\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\Manny\AppData\Local\Yarn\bin
@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  SyntaxError: C:\Users\Manny\Workspace\ff-notify\package.json: Unexpected token } in JSON at position 166
+  SyntaxError: C:\Users\Manny\Workspace\ff-notify\package.json: Unexpected token } in JSON at position 532
       at JSON.parse (<anonymous>)
       at C:\Program Files (x86)\Yarn\lib\cli.js:1625:59
       at Generator.next (<anonymous>)
@@ -26,7 +26,7 @@ npm manifest:
     "scripts": {
       "socket": "nodemon ./NotificationService/index.js",
       "api-dev": "nodemon ./api/index.js",
-      "service-dev": "nodemon ./services/index.js",
+      "service-dev": "nodemon ./services/index.js 3000"
     },
     "dependencies": {
       "axios": "^0.19.0",
@@ -40,7 +40,7 @@ npm manifest:
       "nodemon": "^1.19.1",
       "request": "^2.88.0",
       "request-promise": "^4.2.4",
-      "socket.io": "^2.2.0"
+      "socket.io": "^2.2.0",
     },
     "devDependencies": {
       "concurrently": "^4.1.0"
@@ -3220,7 +3220,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/socket.io-adapter/-/socket.io-adapter-1.1.1.tgz#2a805e8a14d6372124dd9159ad4502f8cb07f06b"
     integrity sha1-KoBeihTWNyEk3ZFZrUUC+MsH8Gs=
   
-  socket.io-client@2.2.0:
+  socket.io-client@2.2.0, socket.io-client@^2.2.0:
     version "2.2.0"
     resolved "https://registry.yarnpkg.com/socket.io-client/-/socket.io-client-2.2.0.tgz#84e73ee3c43d5020ccc1a258faeeb9aec2723af7"
     integrity sha512-56ZrkTDbdTLmBIyfFYesgOxsjcLnwAKoN4CiPyTVkMQj3zTUh0QAx3GbvIvLpFEOvQWu92yyWICxB0u7wkVbYA==

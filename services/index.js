@@ -4,6 +4,8 @@ const util_timeout = require('../util/timeout');
 const RecentNewsService = require('./RecentNews/RecentNewsService');
 const RecentPlayerNewsService = require('./RecentPlayerNews/RecentPlayerNewsService');
 
+console.log('Starting Services...');
+
 (async () => {
     const recentNewsService = new RecentNewsService({ runTimes: 1, delay: 0 });
     let playersResponse;
@@ -15,6 +17,8 @@ const RecentPlayerNewsService = require('./RecentPlayerNews/RecentPlayerNewsServ
     }
 
     while(true) {
+        console.log();
+
         let recentNews;
 
         try {

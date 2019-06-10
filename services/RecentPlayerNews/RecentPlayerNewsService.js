@@ -52,7 +52,6 @@ async function RecentPlayerNews(news, players) {
     }
 
     Logger.logRuntime('Player News Service completed in', startTime);
-    console.log();
 
     return recentRelevantNewsCollection;
 }

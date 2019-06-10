@@ -35,7 +35,6 @@ class RecentNewsService {
             Logger.logRuntime('Recent News Scan completed in', startTime);
             console.log('Total Recent News Sources:', this.totalSourcesScanned);
             console.log('Total News Posts:', this.totalTweetsScanned);
-            console.log();
             
             if(typeof this.runTimes === 'number') this.runTimes--;
 

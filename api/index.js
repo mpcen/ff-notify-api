@@ -10,6 +10,7 @@ mongoose.connection.once('open', () => console.log('Connected to DB'));
 const RecentNews = require('../db/models/RecentNews');
 const RecentPlayerNews = require('../db/models/RecentPlayerNews');
 const Players = require('../db/models/Players');
+const emitter = require('../services/Notifier');
 
 app.use(bodyParser.json({ limit: '999kb' }));
 
@@ -82,6 +83,7 @@ app.post('/recentPlayerNews', async (req, res) => {
         if(!$currentRecentPlayerNews.length) {
             await RecentPlayerNews.create(req.body);
             await RecentNews.deleteOne();
+
             console.log('Stored', req.body.length, 'new recent player news items');
             return res.sendStatus(200);
         }
@@ -97,6 +99,7 @@ app.post('/recentPlayerNews', async (req, res) => {
 
         if(newRecentPlayerNews.length) {
             await RecentPlayerNews.insertMany(newRecentPlayerNews);
+            emitter.emit('test1');
             console.log('Stored', newRecentPlayerNews.length, 'new recent player news items');
         } else {
             console.log('No new recent player news');
@@ -110,4 +113,4 @@ app.post('/recentPlayerNews', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => console.log('API Running on port', PORT));
+app.listen(PORT, () => console.log('API Running at:', `http://localhost:${PORT}`));
