@@ -5,6 +5,6 @@ const socket = io(address);
 
 console.log('Listening to socket:', address)
 
-socket.on('test1', () => {
-    console.log('test1 fired in client');
+socket.on('alert', newRecentPlayerNews => {
+    console.log('New News from Socket Client:', newRecentPlayerNews);
 });

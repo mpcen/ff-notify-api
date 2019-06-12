@@ -8,15 +8,15 @@ const PORT = process.env.PORT || 5001;
 
 app.use(bodyParser.json());
 
-emitter.on('test1', () => {
-  io.emit('test1');
+emitter.on('alert', newRecentPlayerNews => {
+  io.emit('alert', newRecentPlayerNews);
 });
 
 io.on('connection', socket => {
   console.log('Connected to Socket');
 
-  socket.on('test1', () => {
-    console.log('test1 fired in socket');
+  socket.on('alert', newRecentPlayerNews => {
+    console.log('New News from Socket Server:', newRecentPlayerNews);
   }); 
 
   socket.on('disconnect', () => {

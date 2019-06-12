@@ -10,7 +10,7 @@ mongoose.connection.once('open', () => console.log('Connected to DB'));
 const RecentNews = require('../db/models/RecentNews');
 const RecentPlayerNews = require('../db/models/RecentPlayerNews');
 const Players = require('../db/models/Players');
-const emitter = require('../services/Notifier');
+const emitter = require('../services/Socket');
 
 app.use(bodyParser.json({ limit: '999kb' }));
 
@@ -99,8 +99,9 @@ app.post('/recentPlayerNews', async (req, res) => {
 
         if(newRecentPlayerNews.length) {
             await RecentPlayerNews.insertMany(newRecentPlayerNews);
-            emitter.emit('test1');
-            console.log('Stored', newRecentPlayerNews.length, 'new recent player news items');
+            emitter.emit('alert', newRecentPlayerNews);
+            console.log('Stored', newRecentPlayerNews.length, 'new recent player news items:');
+            console.log(newRecentPlayerNews);
         } else {
             console.log('No new recent player news');
         }

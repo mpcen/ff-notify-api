@@ -1,6 +1,4 @@
-const keyword_extractor = require('keyword-extractor');
 const axios = require('axios');
-
 const Logger = require('../../util/logger');
 
 async function RecentPlayerNews(news, players) {
@@ -15,20 +13,12 @@ async function RecentPlayerNews(news, players) {
 
         source.tweets.forEach(tweet => {
             const { content, id, time } = tweet;
-            const extraction_result = keyword_extractor.extract(content, {
-                language: "english",
-                remove_digits: true,
-                return_changed_case: false,
-                remove_duplicates: false,
-                return_chained_words: true
-            });
-            let finalSentence = extraction_result.join(' ');
 
             for(let i = 0; i < playerNames.length; i++) {
                 const name = playerNames[i];
                 const regex = new RegExp(name, 'gi');
 
-                if(finalSentence.search(regex) > -1) {
+                if(content.search(regex) > -1) {
                     recentRelevantNewsCollection.push({
                         platform,
                         username,
@@ -45,7 +35,10 @@ async function RecentPlayerNews(news, players) {
     });
 
     try {
-        await axios.post('http://localhost:5000/recentPlayerNews', recentRelevantNewsCollection);
+        await axios.post(
+            'http://localhost:5000/recentPlayerNews',
+            recentRelevantNewsCollection
+        );
     } catch(e) {
         console.log('Error in RecentPlayerNews:', e);
         return {};

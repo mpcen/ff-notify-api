@@ -11,5 +11,8 @@ module.exports = [
     'sleeperwirehus',
     'RapSheet',
     'ESPNdirocco',
-    'danielrpopper'
+    'danielrpopper',
+    'MaryKayCabot',
+    'MikeReiss',
+    'FieldYates'
 ];
