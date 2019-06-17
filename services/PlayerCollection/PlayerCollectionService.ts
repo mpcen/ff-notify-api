@@ -9,7 +9,7 @@ import { ITeam } from './teams';
 export interface IPlayer {
     name: string;
     college: string;
-    suffix: string;
+    suffix?: string;
     teamId: number;
     number: string;
     position: string;
@@ -17,11 +17,11 @@ export interface IPlayer {
 
 export class PlayerCollectionService {
     runTimes: number;
-    delay: number;
+    delay: string;
     totalTeamsScanned: number;
     totalPlayersScanned: number;
 
-    constructor({ runTimes, delay }: { runTimes: number; delay: number }) {
+    constructor({ runTimes, delay }: { runTimes: number; delay: string }) {
         this.runTimes = runTimes;
         this.delay = delay;
         this.totalTeamsScanned = 0;
@@ -148,7 +148,7 @@ export class PlayerCollectionService {
     }
 
     flattenPlayers(teams: IPlayer[][]): IPlayer[] {
-        const playerMap = new Map();
+        const playerMap = new Map<string, IPlayer[]>();
         const flattenedPlayers: IPlayer[] = [];
 
         teams.forEach(players => {

@@ -38,7 +38,7 @@ exports.__esModule = true;
 function util_timeout(ms) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            return [2 /*return*/, new Promise(function (resolve) { return setTimeout(resolve, ms); })];
+            return [2 /*return*/, new Promise(function (resolve) { return setTimeout(resolve, parseInt(ms)); })];
         });
     });
 }
