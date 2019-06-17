@@ -1,8 +1,10 @@
 const axios = require('axios');
-const util_timeout = require('../util/timeout');
+const { util_timeout } = require('../util/timeout');
 
-const RecentNewsService = require('./RecentNews/RecentNewsService');
-const RecentPlayerNewsService = require('./RecentPlayerNews/RecentPlayerNewsService');
+const { RecentNewsService } = require('./RecentNews/RecentNewsService');
+const { RecentPlayerNews } = require('./RecentPlayerNews/RecentPlayerNewsService');
+
+const TIMEOUT = process.argv[2] || 3000;
 
 console.log('Starting Services...');
 
@@ -12,25 +14,26 @@ console.log('Starting Services...');
 
     try {
         playersResponse = await axios.get('http://localhost:5000/players');
-    } catch(e) {
+    } catch (e) {
         console.log('Error in main playersResponse:', e);
     }
 
-    while(true) {
+    while (true) {
         console.log();
 
         let recentNews;
 
         try {
             recentNews = await recentNewsService.run();
-            await RecentPlayerNewsService(recentNews,playersResponse.data[0].players);
-        } catch(e) {
+            debugger;
+            await RecentPlayerNews(recentNews, playersResponse.data[0].players);
+        } catch (e) {
             console.log('Error main:', e);
         }
 
         recentNewsService.runTimes = 1;
-        
-        console.log('Timing out for', process.argv[2] + 'ms');
-        await util_timeout(process.argv[2] || 5000);
+
+        console.log('Timing out for', TIMEOUT + 'ms');
+        await util_timeout(TIMEOUT);
     }
 })();

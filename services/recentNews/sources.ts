@@ -1,6 +1,4 @@
-"use strict";
-exports.__esModule = true;
-exports.TWITTER_SOURCES = [
+export const TWITTER_SOURCES = [
     'TeamMouseplay',
     'AdamSchefter',
     'rotoworld_fb',

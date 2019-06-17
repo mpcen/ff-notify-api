@@ -1,29 +1,29 @@
-class Logger {
-    static log(text) {
+"use strict";
+exports.__esModule = true;
+var Logger = /** @class */ (function () {
+    function Logger() {
+    }
+    Logger.log = function (text) {
         console.log('*', text.toUpperCase());
         console.log();
-    }
-
-    static logHeader() {
+    };
+    Logger.logHeader = function () {
         console.log('=========================================');
         this.log('round started');
-    }
-
-    static logFooter() {
+    };
+    Logger.logFooter = function () {
         console.log();
         console.log('* ROUND FINISHED');
-        console.log('=========================================')
+        console.log('=========================================');
         console.log();
         console.log();
-    }
-
-    static time() {
+    };
+    Logger.time = function () {
         return Date.now();
-    }
-
-    static logRuntime(text, startTime) {
-        console.log(`${text} ${this.time() - startTime}ms`);
-    }
-}
-
-module.exports = Logger;
+    };
+    Logger.logRuntime = function (text, startTime) {
+        console.log(text + " " + (this.time() - startTime) + "ms");
+    };
+    return Logger;
+}());
+exports.Logger = Logger;

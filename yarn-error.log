@@ -1,8 +1,8 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js run service-dev
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add -D @types/http @types/socket.io @types/body-parser @types/express
 
 PATH: 
-  ;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\iCLS\;C:\Program Files\Intel\Intel(R) Management Engine Components\iCLS\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\NVIDIA Corporation\NVIDIA NGX;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\Users\Manny\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files (x86)\Yarn\bin\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\Manny\.windows-build-tools\python27\;C:\Users\Manny\AppData\Roaming\nvm\v11.13.0\node_modules\npm\node_modules\npm-lifecycle\node-gyp-bin;C:\Program Files\nodejs\node_modules\windows-build-tools\node_modules\.bin;C:\Program Files\nodejs\node_modules\.bin;;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\iCLS\;C:\Program Files\Intel\Intel(R) Management Engine Components\iCLS\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\NVIDIA Corporation\NVIDIA NGX;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\Users\Manny\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files (x86)\Yarn\bin\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\Manny\AppData\Local\Microsoft\WindowsApps;C:\Users\Manny\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Manny\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\Manny\AppData\Local\Yarn\bin
+  C:\Python27\;C:\Python27\Scripts;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\iCLS\;C:\Program Files\Intel\Intel(R) Management Engine Components\iCLS\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\NVIDIA Corporation\NVIDIA NGX;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\Users\Manny\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files (x86)\Yarn\bin\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Java\jdk1.8.0_211\bin;C:\Users\Manny\.windows-build-tools\python27\;C:\Users\Manny\AppData\Roaming\nvm\v11.13.0\node_modules\npm\node_modules\npm-lifecycle\node-gyp-bin;C:\Program Files\nodejs\node_modules\windows-build-tools\node_modules\.bin;C:\Program Files\nodejs\node_modules\.bin;;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\iCLS\;C:\Program Files\Intel\Intel(R) Management Engine Components\iCLS\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\NVIDIA Corporation\NVIDIA NGX;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\Users\Manny\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files (x86)\Yarn\bin\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\Manny\AppData\Local\Microsoft\WindowsApps;C:\Users\Manny\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Manny\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\Manny\AppData\Local\Yarn\bin
 
 Yarn version: 
   1.15.2
@@ -14,19 +14,25 @@ Platform:
   win32 x64
 
 Trace: 
-  SyntaxError: C:\Users\Manny\Workspace\ff-notify\package.json: Unexpected token } in JSON at position 532
-      at JSON.parse (<anonymous>)
-      at C:\Program Files (x86)\Yarn\lib\cli.js:1625:59
-      at Generator.next (<anonymous>)
-      at step (C:\Program Files (x86)\Yarn\lib\cli.js:304:30)
-      at C:\Program Files (x86)\Yarn\lib\cli.js:315:13
+  Error: https://registry.yarnpkg.com/@types%2fhttp: Not found
+      at Request.params.callback [as _callback] (C:\Program Files (x86)\Yarn\lib\cli.js:65167:18)
+      at Request.self.callback (C:\Program Files (x86)\Yarn\lib\cli.js:129541:22)
+      at Request.emit (events.js:193:13)
+      at Request.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:130513:10)
+      at Request.emit (events.js:193:13)
+      at IncomingMessage.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:130435:12)
+      at Object.onceWrapper (events.js:281:20)
+      at IncomingMessage.emit (events.js:198:15)
+      at endReadableNT (_stream_readable.js:1142:12)
+      at processTicksAndRejections (internal/process/task_queues.js:81:17)
 
 npm manifest: 
   {
     "scripts": {
       "socket": "nodemon ./NotificationService/index.js",
       "api-dev": "nodemon ./api/index.js",
-      "service-dev": "nodemon ./services/index.js 3000"
+      "service-dev": "nodemon ./services/index.js 3000",
+      "socket-listener-dev": "nodemon ./services/Socket/listener.js"
     },
     "dependencies": {
       "axios": "^0.19.0",
@@ -35,14 +41,16 @@ npm manifest:
       "date-fns": "^1.30.1",
       "express": "^4.17.1",
       "forever": "^1.0.0",
-      "keyword-extractor": "^0.0.16",
       "mongoose": "^5.5.12",
       "nodemon": "^1.19.1",
       "request": "^2.88.0",
       "request-promise": "^4.2.4",
-      "socket.io": "^2.2.0",
+      "socket.io": "^2.2.0"
     },
     "devDependencies": {
+      "@types/cheerio": "^0.22.11",
+      "@types/date-fns": "^2.6.0",
+      "@types/request-promise": "^4.1.44",
       "concurrently": "^4.1.0"
     }
   }
@@ -55,10 +63,64 @@ Lockfile:
   # yarn lockfile v1
   
   
+  "@types/bluebird@*":
+    version "3.5.27"
+    resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.27.tgz#61eb4d75dc6bfbce51cf49ee9bbebe941b2cb5d0"
+    integrity sha512-6BmYWSBea18+tSjjSC3QIyV93ZKAeNWGM7R6aYt1ryTZXrlHF+QLV0G2yV0viEGVyRkyQsWfMoJ0k/YghBX5sQ==
+  
+  "@types/caseless@*":
+    version "0.12.2"
+    resolved "https://registry.yarnpkg.com/@types/caseless/-/caseless-0.12.2.tgz#f65d3d6389e01eeb458bd54dc8f52b95a9463bc8"
+    integrity sha512-6ckxMjBBD8URvjB6J3NcnuAn5Pkl7t3TizAg+xdlzzQGSPSmBcXf8KoIH0ua/i+tio+ZRUHEXp0HEmvaR4kt0w==
+  
+  "@types/cheerio@^0.22.11":
+    version "0.22.11"
+    resolved "https://registry.yarnpkg.com/@types/cheerio/-/cheerio-0.22.11.tgz#61c0facf9636d14ba5f77fc65ed8913aa845d717"
+    integrity sha512-x0X3kPbholdJZng9wDMhb2swvUi3UYRNAuWAmIPIWlfgAJZp//cql/qblE7181Mg7SjWVwq6ldCPCLn5AY/e7w==
+    dependencies:
+      "@types/node" "*"
+  
+  "@types/date-fns@^2.6.0":
+    version "2.6.0"
+    resolved "https://registry.yarnpkg.com/@types/date-fns/-/date-fns-2.6.0.tgz#b062ca46562002909be0c63a6467ed173136acc1"
+    integrity sha1-sGLKRlYgApCb4MY6ZGftFzE2rME=
+    dependencies:
+      date-fns "*"
+  
+  "@types/form-data@*":
+    version "2.2.1"
+    resolved "https://registry.yarnpkg.com/@types/form-data/-/form-data-2.2.1.tgz#ee2b3b8eaa11c0938289953606b745b738c54b1e"
+    integrity sha512-JAMFhOaHIciYVh8fb5/83nmuO/AHwmto+Hq7a9y8FzLDcC1KCU344XDOMEmahnrTFlHjgh4L0WJFczNIX2GxnQ==
+    dependencies:
+      "@types/node" "*"
+  
   "@types/node@*":
     version "12.0.2"
     resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.2.tgz#3452a24edf9fea138b48fad4a0a028a683da1e40"
     integrity sha512-5tabW/i+9mhrfEOUcLDu2xBPsHJ+X5Orqy9FKpale3SjDA17j5AEpYq5vfy3oAeAHGcvANRCO3NV3d2D6q3NiA==
+  
+  "@types/request-promise@^4.1.44":
+    version "4.1.44"
+    resolved "https://registry.yarnpkg.com/@types/request-promise/-/request-promise-4.1.44.tgz#05b59cd18445832fae16b68d5bb3d4621b549485"
+    integrity sha512-RId7eFsUKxfal1LirDDIcOp9u3MM3NXFDBcC3sqIMcmu7f4U6DsCEMD8RbLZtnPrQlN5Jc79di/WPsIEDO4keg==
+    dependencies:
+      "@types/bluebird" "*"
+      "@types/request" "*"
+  
+  "@types/request@*":
+    version "2.48.1"
+    resolved "https://registry.yarnpkg.com/@types/request/-/request-2.48.1.tgz#e402d691aa6670fbbff1957b15f1270230ab42fa"
+    integrity sha512-ZgEZ1TiD+KGA9LiAAPPJL68Id2UWfeSO62ijSXZjFJArVV+2pKcsVHmrcu+1oiE3q6eDGiFiSolRc4JHoerBBg==
+    dependencies:
+      "@types/caseless" "*"
+      "@types/form-data" "*"
+      "@types/node" "*"
+      "@types/tough-cookie" "*"
+  
+  "@types/tough-cookie@*":
+    version "2.3.5"
+    resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-2.3.5.tgz#9da44ed75571999b65c37b60c9b2b88db54c585d"
+    integrity sha512-SCcK7mvGi3+ZNz833RRjFIxrn4gI1PPR3NtuIS+6vMkvmsGjosqTJwRt5bAEFLRz+wtJMWv8+uOnZf2hi2QXTg==
   
   abbrev@1:
     version "1.1.1"
@@ -775,7 +837,7 @@ Lockfile:
     dependencies:
       assert-plus "^1.0.0"
   
-  date-fns@^1.23.0, date-fns@^1.30.1:
+  date-fns@*, date-fns@^1.23.0, date-fns@^1.30.1:
     version "1.30.1"
     resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-1.30.1.tgz#2e71bf0b119153dbb4cc4e88d9ea5acfb50dc05c"
     integrity sha512-hBSVCvSmWC+QypYObzwGOd9wqdDpOt+0wl0KbU+R+uuZBS1jN8VsD1ss3irQDknRj5NvxiTF6oj/nDRnN/UQNw==
@@ -1947,14 +2009,6 @@ Lockfile:
     version "2.3.0"
     resolved "https://registry.yarnpkg.com/kareem/-/kareem-2.3.0.tgz#ef33c42e9024dce511eeaf440cd684f3af1fc769"
     integrity sha512-6hHxsp9e6zQU8nXsP+02HGWXwTkOEw6IROhF2ZA28cYbUk4eJ6QbtZvdqZOdD9YPKghG3apk5eOCvs+tLl3lRg==
-  
-  keyword-extractor@^0.0.16:
-    version "0.0.16"
-    resolved "https://registry.yarnpkg.com/keyword-extractor/-/keyword-extractor-0.0.16.tgz#225342f85de31ef3087fd58f951d655d59e1d492"
-    integrity sha512-Dbp8sgZjpwYoYc2AIkKZfLsSPjnsDYhZ9/tVGjodoS/EbgrYEuwsOgJfWYT+GDYXQGU2LIGBbgGlYdHj06iYLg==
-    dependencies:
-      underscore "1.9.1"
-      underscore.string "3.3.5"
   
   kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
     version "3.2.2"
@@ -3220,7 +3274,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/socket.io-adapter/-/socket.io-adapter-1.1.1.tgz#2a805e8a14d6372124dd9159ad4502f8cb07f06b"
     integrity sha1-KoBeihTWNyEk3ZFZrUUC+MsH8Gs=
   
-  socket.io-client@2.2.0, socket.io-client@^2.2.0:
+  socket.io-client@2.2.0:
     version "2.2.0"
     resolved "https://registry.yarnpkg.com/socket.io-client/-/socket.io-client-2.2.0.tgz#84e73ee3c43d5020ccc1a258faeeb9aec2723af7"
     integrity sha512-56ZrkTDbdTLmBIyfFYesgOxsjcLnwAKoN4CiPyTVkMQj3zTUh0QAx3GbvIvLpFEOvQWu92yyWICxB0u7wkVbYA==
@@ -3326,11 +3380,6 @@ Lockfile:
     integrity sha512-NzNVhJDYpwceVVii8/Hu6DKfD2G+NrQHlS/V/qgv763EYudVwEcMQNxd2lh+0VrUByXN/oJkl5grOhYWvQUYiw==
     dependencies:
       extend-shallow "^3.0.0"
-  
-  sprintf-js@^1.0.3:
-    version "1.1.2"
-    resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.1.2.tgz#da1765262bf8c0f571749f2ad6c26300207ae673"
-    integrity sha512-VE0SOVEHCk7Qc8ulkWw3ntAzXuqf7S2lvwQaDLRnUeIEaKNQJzV6BwmLKhOqT61aGhfUMrXeaBk+oDGCzvhcug==
   
   sshpk@^1.7.0:
     version "1.16.1"
@@ -3581,19 +3630,6 @@ Lockfile:
     dependencies:
       debug "^2.2.0"
   
-  underscore.string@3.3.5:
-    version "3.3.5"
-    resolved "https://registry.yarnpkg.com/underscore.string/-/underscore.string-3.3.5.tgz#fc2ad255b8bd309e239cbc5816fd23a9b7ea4023"
-    integrity sha512-g+dpmgn+XBneLmXXo+sGlW5xQEt4ErkS3mgeN2GFbremYeMBSJKr9Wf2KJplQVaiPY/f7FN6atosWYNm9ovrYg==
-    dependencies:
-      sprintf-js "^1.0.3"
-      util-deprecate "^1.0.2"
-  
-  underscore@1.9.1:
-    version "1.9.1"
-    resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.9.1.tgz#06dce34a0e68a7babc29b365b8e74b8925203961"
-    integrity sha512-5/4etnCkd9c8gwgowi5/om/mYO5ajCaOgdzj/oW+0eQV9WxKBDZw5+ycmKmeaTXjInS/W0BzpGLo2xR2aBwZdg==
-  
   union-value@^1.0.0:
     version "1.0.0"
     resolved "https://registry.yarnpkg.com/union-value/-/union-value-1.0.0.tgz#5c71c34cb5bad5dcebe3ea0cd08207ba5aa1aea4"
@@ -3674,7 +3710,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"
     integrity sha512-cwESVXlO3url9YWlFW/TA9cshCEhtu7IKJ/p5soJ/gGpj7vbvFrAY/eIioQ6Dw23KjZhYgiIo8HOs1nQ2vr/oQ==
   
-  util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
+  util-deprecate@^1.0.1, util-deprecate@~1.0.1:
     version "1.0.2"
     resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
     integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=

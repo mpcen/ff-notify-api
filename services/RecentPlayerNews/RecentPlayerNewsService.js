@@ -1,52 +1,89 @@
-const axios = require('axios');
-const Logger = require('../../util/logger');
-
-async function RecentPlayerNews(news, players) {
-    const startTime = Logger.time();
-    const recentRelevantNewsCollection = [];
-    const playerNames = [];
-
-    players.forEach(player => playerNames.push(player.name));
-
-    news.forEach(source => {
-        const { username, platform } = source;
-
-        source.tweets.forEach(tweet => {
-            const { content, id, time } = tweet;
-
-            for(let i = 0; i < playerNames.length; i++) {
-                const name = playerNames[i];
-                const regex = new RegExp(name, 'gi');
-
-                if(content.search(regex) > -1) {
-                    recentRelevantNewsCollection.push({
-                        platform,
-                        username,
-                        contentId: id,
-                        player: name,
-                        content,
-                        time,
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+exports.__esModule = true;
+var axios_1 = require("axios");
+var logger_1 = require("../../util/logger");
+function RecentPlayerNews(news, players) {
+    return __awaiter(this, void 0, void 0, function () {
+        var startTime, recentRelevantNewsCollection, playerNames, e_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    startTime = logger_1.Logger.time();
+                    recentRelevantNewsCollection = [];
+                    playerNames = [];
+                    players.forEach(function (player) { return playerNames.push(player.name); });
+                    news.forEach(function (source) {
+                        var username = source.username, platform = source.platform;
+                        source.tweets.forEach(function (tweet) {
+                            var content = tweet.content, id = tweet.id, time = tweet.time;
+                            for (var i = 0; i < playerNames.length; i++) {
+                                var name_1 = playerNames[i];
+                                var regex = new RegExp(name_1, 'gi');
+                                if (content.search(regex) > -1) {
+                                    recentRelevantNewsCollection.push({
+                                        platform: platform,
+                                        username: username,
+                                        contentId: id,
+                                        player: name_1,
+                                        content: content,
+                                        time: time
+                                    });
+                                    break;
+                                }
+                            }
+                        });
                     });
-
-                    break;
-                }
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, axios_1["default"].post('http://localhost:5000/recentPlayerNews', recentRelevantNewsCollection)];
+                case 2:
+                    _a.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    e_1 = _a.sent();
+                    console.log('Error in RecentPlayerNews:', e_1.message);
+                    return [2 /*return*/, []];
+                case 4:
+                    logger_1.Logger.logRuntime('Player News Service completed in', startTime);
+                    return [2 /*return*/, recentRelevantNewsCollection];
             }
         });
     });
-
-    try {
-        await axios.post(
-            'http://localhost:5000/recentPlayerNews',
-            recentRelevantNewsCollection
-        );
-    } catch(e) {
-        console.log('Error in RecentPlayerNews:', e);
-        return {};
-    }
-
-    Logger.logRuntime('Player News Service completed in', startTime);
-
-    return recentRelevantNewsCollection;
 }
-
-module.exports = RecentPlayerNews;
+exports.RecentPlayerNews = RecentPlayerNews;

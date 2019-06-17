@@ -10,7 +10,7 @@ mongoose.connection.once('open', () => console.log('Connected to DB'));
 const RecentNews = require('../db/models/RecentNews');
 const RecentPlayerNews = require('../db/models/RecentPlayerNews');
 const Players = require('../db/models/Players');
-const emitter = require('../services/Socket');
+const { emitter } = require('../services/Socket');
 
 app.use(bodyParser.json({ limit: '999kb' }));
 
@@ -18,7 +18,7 @@ app.get('/recentNews', async (req, res) => {
     try {
         const response = await RecentNews.find();
         res.send(response);
-    } catch(e) {
+    } catch (e) {
         console.log('Error in GET /recentNews:', e);
         res.sendStatus(500);
     }
@@ -29,10 +29,10 @@ app.post('/recentNews', async (req, res) => {
         name: 'twitter',
         recentNews: req.body.recentNews
     });
-        
+
     try {
         await recentNews.save();
-    } catch(e) {
+    } catch (e) {
         console.log('Error from POST /recentNews:', e);
         res.sendStatus(500);
     }
@@ -45,7 +45,7 @@ app.get('/players', async (req, res) => {
     try {
         const response = await Players.find();
         res.send(response);
-    } catch(e) {
+    } catch (e) {
         console.log('Error from GET /players:', e);
         res.sendStatus(500);
     }
@@ -57,7 +57,7 @@ app.post('/players', async (req, res) => {
     try {
         await players.save();
         console.log('Stored new Player Data');
-    } catch(e) {
+    } catch (e) {
         console.log('Error from POST /players:', e);
         res.sendStatus(501);
     }
@@ -69,7 +69,7 @@ app.get('/recentPlayerNews', async (req, res) => {
     try {
         const response = await RecentPlayerNews.find();
         res.send(response);
-    } catch(e) {
+    } catch (e) {
         console.log('Error GET /recentPlayerNews:', e);
         res.sendStatus(500);
     }
@@ -80,7 +80,7 @@ app.post('/recentPlayerNews', async (req, res) => {
         const $currentRecentPlayerNews = await RecentPlayerNews.find();
         const newRecentPlayerNews = [];
 
-        if(!$currentRecentPlayerNews.length) {
+        if (!$currentRecentPlayerNews.length) {
             await RecentPlayerNews.create(req.body);
             await RecentNews.deleteOne();
 
@@ -90,14 +90,16 @@ app.post('/recentPlayerNews', async (req, res) => {
 
         req.body.forEach(incomingRecentPlayerNewsItem => {
             const item = $currentRecentPlayerNews.find($currentRecentPlayerNewsItem => {
-                return $currentRecentPlayerNewsItem.platform === incomingRecentPlayerNewsItem.platform &&
+                return (
+                    $currentRecentPlayerNewsItem.platform === incomingRecentPlayerNewsItem.platform &&
                     $currentRecentPlayerNewsItem.contentId === incomingRecentPlayerNewsItem.contentId
+                );
             });
 
-            if(!item) newRecentPlayerNews.push(incomingRecentPlayerNewsItem);
+            if (!item) newRecentPlayerNews.push(incomingRecentPlayerNewsItem);
         });
 
-        if(newRecentPlayerNews.length) {
+        if (newRecentPlayerNews.length) {
             await RecentPlayerNews.insertMany(newRecentPlayerNews);
             emitter.emit('alert', newRecentPlayerNews);
             console.log('Stored', newRecentPlayerNews.length, 'new recent player news items:');
@@ -108,7 +110,7 @@ app.post('/recentPlayerNews', async (req, res) => {
 
         await RecentNews.deleteOne();
         res.sendStatus(200);
-    } catch(e) {
+    } catch (e) {
         console.log('Error in POST /recentPlayerNews:', e);
         res.sendStatus(500);
     }
