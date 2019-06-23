@@ -3,8 +3,8 @@ import { RecentPlayerNews } from './RecentPlayerNewsService';
 
 (async () => {
     try {
-        const playersResponse = await axios.get('http://localhost:5000/players');
-        const recentNewsResponse = await axios.get('http://localhost:5000/recentnews');
+        const playersResponse = await axios.get(`http://localhost:${process.env.API_PORT}/players`);
+        const recentNewsResponse = await axios.get(`http://localhost:${process.env.API_PORT}/recentnews`);
         if (!recentNewsResponse.data.length) {
             console.log('No new recent news');
             return;

@@ -6,12 +6,13 @@ import { RecentPlayerNews } from './RecentPlayerNews/RecentPlayerNewsService';
 
 (async () => {
     console.log('Starting Services...');
-    const TIMEOUT = process.argv[2] || '3000';
+    const API_PORT = process.env.API_PORT || 3000;
+    const TIMEOUT = process.env.TIMEOUT || '3000';
     const recentNewsService = new RecentNewsService({ runTimes: 1, delay: 0 });
     let response: AxiosResponse;
 
     try {
-        response = await axios.get('http://localhost:5000/players');
+        response = await axios.get(`http://localhost:${API_PORT}/players`);
     } catch (e) {
         console.log('Error in main playersResponse:', e);
     }

@@ -1,9 +1,10 @@
 {
     "scripts": {
-        "socket": "nodemon ./NotificationService/index.js",
-        "api-dev": "nodemon ./api/index.js",
-        "service-dev": "nodemon ./services/index.js 3000",
-        "socket-listener-dev": "nodemon ./services/Socket/listener.js"
+        "start-dev-watch": "concurrently \"yarn:build-dev-watch\" \"yarn:api-dev-watch\" \"yarn:services-dev-watch\" \"yarn:websocket-listener-dev-watch\" ",
+        "build-dev-watch": "webpack --config webpack.config.js --watch",
+        "api-dev-watch": "SET API_PORT=3000&&SET WEBSOCKET_PORT=3001&& nodemon ./dist/api.js",
+        "services-dev-watch": "SET API_PORT=3000&& nodemon ./dist/services.js",
+        "websocket-listener-dev-watch": "SET WEBSOCKET_PORT=3001&& nodemon ./dist/socketListener.js"
     },
     "dependencies": {
         "axios": "^0.19.0",
@@ -15,15 +16,21 @@
         "nodemon": "^1.19.1",
         "request": "^2.88.0",
         "request-promise": "^4.2.4",
-        "socket.io": "^2.2.0"
+        "socket.io": "^2.2.0",
+        "typescript": "^3.5.2"
     },
     "devDependencies": {
+        "@types/axios": "^0.14.0",
         "@types/body-parser": "^1.17.0",
         "@types/cheerio": "^0.22.11",
         "@types/date-fns": "^2.6.0",
         "@types/express": "^4.17.0",
         "@types/request-promise": "^4.1.44",
         "@types/socket.io": "^2.1.2",
-        "concurrently": "^4.1.0"
+        "@types/socket.io-client": "^1.4.32",
+        "concurrently": "^4.1.0",
+        "webpack": "^4.35.0",
+        "webpack-cli": "^3.3.4",
+        "ts-loader": "^6.0.4"
     }
 }

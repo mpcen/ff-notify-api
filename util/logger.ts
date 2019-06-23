@@ -1,5 +1,5 @@
 export class Logger {
-    static log(text) {
+    static log(text: string) {
         console.log('*', text.toUpperCase());
         console.log();
     }

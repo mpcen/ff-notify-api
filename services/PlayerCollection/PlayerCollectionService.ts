@@ -54,7 +54,7 @@ export class PlayerCollectionService {
             players = this.flattenPlayers(teamsWithPlayers);
 
             try {
-                await axios.post('http://localhost:5000/players', players);
+                await axios.post(`http://localhost:${process.env.API_PORT}/players`, players);
             } catch (e) {
                 console.log('Error in PlayerServices run:', e);
                 return [];

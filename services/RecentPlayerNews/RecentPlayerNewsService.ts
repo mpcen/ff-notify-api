@@ -50,7 +50,7 @@ export async function RecentPlayerNews(
     });
 
     try {
-        await axios.post('http://localhost:5000/recentPlayerNews', recentRelevantNewsCollection);
+        await axios.post(`http://localhost:${process.env.API_PORT}/recentPlayerNews`, recentRelevantNewsCollection);
     } catch (e) {
         console.log('Error in RecentPlayerNews:', e.message);
         return [];

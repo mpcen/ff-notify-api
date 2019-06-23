@@ -1,5 +1,5 @@
 const app = require('express')();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.API_PORT || 3000;
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
@@ -10,7 +10,7 @@ mongoose.connection.once('open', () => console.log('Connected to DB'));
 const RecentNews = require('../db/models/RecentNews');
 const RecentPlayerNews = require('../db/models/RecentPlayerNews');
 const Players = require('../db/models/Players');
-const { emitter } = require('../services/Socket');
+const { emitter } = require('../websocket');
 
 app.use(bodyParser.json({ limit: '999kb' }));
 
@@ -74,7 +74,6 @@ app.get('/recentPlayerNews', async (req, res) => {
         res.sendStatus(500);
     }
 });
-
 app.post('/recentPlayerNews', async (req, res) => {
     try {
         const $currentRecentPlayerNews = await RecentPlayerNews.find();
