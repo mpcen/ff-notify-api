@@ -1,5 +1,6 @@
 import * as cheerio from 'cheerio';
 import axios, { AxiosResponse } from 'axios';
+import * as uuidv4 from 'uuidv4';
 
 import { teams as TEAMS_NFL_COM } from './teams';
 import { util_timeout } from '../../util/timeout';
@@ -7,6 +8,7 @@ import { SUFFIXES } from '../../util/suffixes';
 import { ITeam } from './teams';
 
 export interface IPlayer {
+    id: string;
     name: string;
     college: string;
     suffix?: string;
@@ -17,11 +19,11 @@ export interface IPlayer {
 
 export class PlayerCollectionService {
     runTimes: number;
-    delay: string;
+    delay: number;
     totalTeamsScanned: number;
     totalPlayersScanned: number;
 
-    constructor({ runTimes, delay }: { runTimes: number; delay: string }) {
+    constructor({ runTimes, delay }: { runTimes: number; delay: number }) {
         this.runTimes = runTimes;
         this.delay = delay;
         this.totalTeamsScanned = 0;
@@ -53,14 +55,41 @@ export class PlayerCollectionService {
 
             players = this.flattenPlayers(teamsWithPlayers);
 
+            let playerMutations = ``;
+
+            players.forEach(player => {
+                playerMutations += `
+                    p_${player.id}: createPlayer (
+                        data: {
+                            name: "${player.name}",
+                            position: "${player.position}"
+                        }
+                    ) {
+                        name
+                        position
+                    }
+                `;
+            });
+
+            const mutation = `
+                mutation {
+                    ${playerMutations}
+                }
+            `;
+
             try {
-                await axios.post(`http://localhost:${process.env.API_PORT}/players`, players);
+                //await axios.post(`http://localhost:4000/ffnotify/dev`, players);
+                await axios({
+                    url: 'http://localhost:4000/ffnotify/dev',
+                    method: 'post',
+                    data: { query: mutation }
+                });
             } catch (e) {
-                console.log('Error in PlayerServices run:', e);
+                console.error('Error in PlayerServices run:', e.message);
                 return [];
             }
 
-            await util_timeout(this.delay);
+            await util_timeout(this.delay.toString());
         }
 
         return players;
@@ -123,6 +152,7 @@ export class PlayerCollectionService {
             }
 
             const player: IPlayer = {
+                id: uuidv4(),
                 name: playerName,
                 suffix: maybeSuffix,
                 college: $player

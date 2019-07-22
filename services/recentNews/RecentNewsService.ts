@@ -133,7 +133,7 @@ export class RecentNewsService {
                 platform: 'twitter'
             } as IRecentNewsSource;
         } catch (e) {
-            console.log('Error in RecentNewsService:', e);
+            console.log(`Error fetching source: ${TWITTER_SOURCE}`, e);
             return e;
         }
     }

@@ -18,7 +18,8 @@ module.exports = {
     entry: {
         api: './api/index.js',
         services: './services/index.ts',
-        socketListener: './websocket/listener.ts'
+        socketListener: './websocket/listener.ts',
+        playerCollection: './services/PlayerCollection/index.ts'
     },
     devtool: 'inline-source-map',
     module: {

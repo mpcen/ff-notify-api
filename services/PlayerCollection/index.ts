@@ -1,16 +1,9 @@
-const { PlayerCollectionService } = require('./PlayerCollectionService');
+import { PlayerCollectionService } from './PlayerCollectionService';
 
-(async () => {
-    const options = {
-        runTimes: 1,
-        delay: 0
-    };
+const options = {
+    runTimes: 1,
+    delay: 0
+};
 
-    const playerCollectionService = new PlayerCollectionService(options);
-
-    try {
-        await playerCollectionService.run();
-    } catch (e) {
-        console.log('Error in player collection service:', e);
-    }
-})();
+const playerCollectionService = new PlayerCollectionService(options);
+playerCollectionService.run().catch(e => console.error('Error in player collection service:', e));
