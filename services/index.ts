@@ -7,7 +7,7 @@ import { RecentPlayerNews } from './RecentPlayerNews/RecentPlayerNewsService';
 (async () => {
     console.log('Starting Services...');
     const API_PORT = process.env.API_PORT || 3000;
-    const TIMEOUT = process.env.TIMEOUT || '3000';
+    const TIMEOUT = process.env.TIMEOUT || '10000';
     const recentNewsService = new RecentNewsService({ runTimes: 1, delay: 0 });
     let response: AxiosResponse;
 

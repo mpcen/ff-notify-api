@@ -44,7 +44,7 @@ app.post('/recentNews', async (req, res) => {
 app.get('/players', async (req, res) => {
     try {
         const response = await Players.find();
-        res.send(response);
+        res.send(response[0].players);
     } catch (e) {
         console.log('Error from GET /players:', e);
         res.sendStatus(500);
@@ -102,7 +102,6 @@ app.post('/recentPlayerNews', async (req, res) => {
             await RecentPlayerNews.insertMany(newRecentPlayerNews);
             emitter.emit('alert', newRecentPlayerNews);
             console.log('Stored', newRecentPlayerNews.length, 'new recent player news items:');
-            console.log(newRecentPlayerNews);
         } else {
             console.log('No new recent player news');
         }

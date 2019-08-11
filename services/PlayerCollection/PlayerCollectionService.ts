@@ -7,11 +7,13 @@ import { util_timeout } from '../../util/timeout';
 import { SUFFIXES } from '../../util/suffixes';
 import { ITeam } from './teams';
 
+const PORT = process.env.PORT || 3000;
+
 export interface IPlayer {
     id: string;
     name: string;
     college: string;
-    suffix?: string;
+    suffix: string;
     teamId: number;
     number: string;
     position: string;
@@ -55,37 +57,12 @@ export class PlayerCollectionService {
 
             players = this.flattenPlayers(teamsWithPlayers);
 
-            let playerMutations = ``;
-
-            players.forEach(player => {
-                playerMutations += `
-                    p_${player.id}: createPlayer (
-                        data: {
-                            name: "${player.name}",
-                            position: "${player.position}"
-                        }
-                    ) {
-                        name
-                        position
-                    }
-                `;
-            });
-
-            const mutation = `
-                mutation {
-                    ${playerMutations}
-                }
-            `;
-
             try {
-                //await axios.post(`http://localhost:4000/ffnotify/dev`, players);
-                await axios({
-                    url: 'http://localhost:4000/ffnotify/dev',
-                    method: 'post',
-                    data: { query: mutation }
-                });
+                await axios.post(`http://localhost:${PORT}/players`, players);
+
+                console.log('Finished storing players');
             } catch (e) {
-                console.error('Error in PlayerServices run:', e.message);
+                console.log('Error in PlayerServices run:', e.message);
                 return [];
             }
 
@@ -144,15 +121,18 @@ export class PlayerCollectionService {
             let name_split = playerName.split(' ');
             let maybeSuffix = name_split[name_split.length - 1];
 
-            if (!SUFFIXES.has(maybeSuffix)) {
-                maybeSuffix = '';
+            if (SUFFIXES.has(maybeSuffix)) {
+                maybeSuffix = name_split.pop();
             } else {
-                name_split.pop();
-                playerName = name_split.join(' ');
+                maybeSuffix = '';
             }
 
+            playerName = name_split.join(' ');
+
             const player: IPlayer = {
-                id: uuidv4(),
+                id: uuidv4()
+                    .split('-')
+                    .join(''),
                 name: playerName,
                 suffix: maybeSuffix,
                 college: $player
