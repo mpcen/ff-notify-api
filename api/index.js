@@ -3,14 +3,14 @@ const PORT = process.env.API_PORT || 3000;
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/FFNotify', { useNewUrlParser: true });
+mongoose.connect('mongodb://localhost/FFNotify', { useNewUrlParser: true, useFindAndModify: false });
 mongoose.connection.on('err', console.error.bind(console, 'DB connection error:'));
 mongoose.connection.once('open', () => console.log('Connected to DB'));
 
 const RecentNews = require('../db/models/RecentNews');
 const RecentPlayerNews = require('../db/models/RecentPlayerNews');
 const Players = require('../db/models/Players');
-const { emitter } = require('../websocket');
+const { emitter } = require('../websocket/index.ts');
 
 app.use(bodyParser.json({ limit: '999kb' }));
 
@@ -44,25 +44,51 @@ app.post('/recentNews', async (req, res) => {
 app.get('/players', async (req, res) => {
     try {
         const response = await Players.find();
-        res.send(response[0].players);
+
+        if (!response) {
+            res.send(201);
+        } else {
+            res.send(response);
+        }
     } catch (e) {
-        console.log('Error from GET /players:', e);
+        console.log('Error from GET /players:', e.message);
         res.sendStatus(500);
     }
 });
 
 app.post('/players', async (req, res) => {
-    const players = new Players({ players: req.body });
+    const players = req.body;
 
     try {
-        await players.save();
+        const doc = await Players.create(players);
+
         console.log('Stored new Player Data');
+        return res.send(doc);
     } catch (e) {
         console.log('Error from POST /players:', e);
         res.sendStatus(501);
     }
+});
 
-    return res.sendStatus(200);
+app.put('/players', async (req, res) => {
+    const { action, players } = req.body;
+
+    try {
+        if (action === 'ADD') {
+            const doc = await Players.insertMany(players);
+
+            res.send(doc);
+        } else if (action === 'UPDATE') {
+            const doc = await Promise.all(
+                players.map(({ id, teamId }) => Players.findOneAndUpdate({ id }, { teamId }))
+            );
+
+            res.send(players);
+        }
+    } catch (e) {
+        console.log('Error from PUT /players:', e.message);
+        res.sendStatus(500);
+    }
 });
 
 app.get('/recentPlayerNews', async (req, res) => {
@@ -74,6 +100,7 @@ app.get('/recentPlayerNews', async (req, res) => {
         res.sendStatus(500);
     }
 });
+
 app.post('/recentPlayerNews', async (req, res) => {
     try {
         const $currentRecentPlayerNews = await RecentPlayerNews.find();

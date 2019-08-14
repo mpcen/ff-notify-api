@@ -5,6 +5,7 @@ export interface ITeam {
     abbrev: string;
 }
 
+// prob should deep freeze this
 export const teams: ITeam[] = [
     {
         id: 1,

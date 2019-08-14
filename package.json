@@ -1,10 +1,13 @@
 {
     "scripts": {
-        "start-dev-watch": "concurrently \"yarn:build-dev-watch\" \"yarn:api-dev-watch\" \"yarn:services-dev-watch\" \"yarn:websocket-listener-dev-watch\" ",
-        "build-dev": "webpack --config webpack.config.js",
-        "build-dev-watch": "webpack --config webpack.config.js --watch",
-        "api-dev-watch": "SET API_PORT=3000&&SET WEBSOCKET_PORT=3001&& nodemon ./dist/api.js",
-        "services-dev-watch": "SET API_PORT=3000&& nodemon ./dist/services.js",
+        "start-watch": "concurrently \"yarn:build-dev-watch\" \"yarn:api-dev-watch\" \"yarn:services-dev-watch\" \"yarn:websocket-listener-dev-watch\" ",
+        "build": "webpack --config webpack.config.js",
+        "build-watch": "webpack --config webpack.config.js --watch",
+        "api-watch": "SET API_PORT=3000&&SET WEBSOCKET_PORT=3001&& ts-node ./api/index.js",
+        "api-inspect": "SET API_PORT=3000&&SET WEBSOCKET_PORT=3001&& nodemon --inspect -r ts-node/register ./api/index.js",
+        "player-service-inspect": "node --inspect=0.0.0.0:9228 -r ts-node/register ./services/playercollection/index.ts",
+        "player-service": "ts-node ./services/playercollection/index.ts",
+        "services-watch": "SET API_PORT=3000&& nodemon ./dist/services.js",
         "websocket-listener-dev-watch": "SET WEBSOCKET_PORT=3001&& nodemon ./dist/socketListener.js"
     },
     "dependencies": {

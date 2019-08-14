@@ -32,9 +32,12 @@ export class PlayerCollectionService {
         this.totalPlayersScanned = 0;
     }
 
-    async run(): Promise<IPlayer[]> {
+    async run(): Promise<void> {
+        const newPlayers: IPlayer[] = [];
+        const updatedPlayers: IPlayer[] = [];
         let teamsWithPlayers: IPlayer[][] = [];
-        let players: IPlayer[] = [];
+        let discoveredPlayers: IPlayer[] = [];
+        let storedPlayers: IPlayer[] = [];
 
         while (this.runTimes) {
             let startTime = Date.now();
@@ -44,8 +47,8 @@ export class PlayerCollectionService {
             try {
                 teamsWithPlayers = await this.fetchTeamsWithPlayers(TEAMS_NFL_COM);
             } catch (e) {
-                console.log('Error from within PlayerCollectionService run:', e);
-                return [];
+                console.log('Error from within PlayerCollectionService run:', e.message);
+                throw new Error(e.message);
             }
 
             console.log('Player Collection Scan completed in', Date.now() - startTime + 'ms');
@@ -55,21 +58,66 @@ export class PlayerCollectionService {
 
             if (typeof this.runTimes === 'number') this.runTimes--;
 
-            players = this.flattenPlayers(teamsWithPlayers);
+            discoveredPlayers = this.flattenPlayers(teamsWithPlayers);
 
             try {
-                await axios.post(`http://localhost:${PORT}/players`, players);
+                const storedPlayersResponse: AxiosResponse = await axios.get(`http://localhost:${PORT}/players`);
+
+                storedPlayers = storedPlayersResponse.data;
+
+                // seed db
+                if (!storedPlayers.length) {
+                    await axios.post(`http://localhost:${PORT}/players`, discoveredPlayers);
+                    return;
+                }
+
+                discoveredPlayers.forEach((discoveredPlayer: IPlayer) => {
+                    const storedPlayer = storedPlayers.find((storedPlayer: IPlayer) => {
+                        return discoveredPlayer.id === storedPlayer.id;
+                    });
+
+                    // if player is new
+                    if (!storedPlayer) {
+                        newPlayers.push(discoveredPlayer);
+                    }
+
+                    // if existing player switched teams
+                    else if (storedPlayer.teamId !== discoveredPlayer.teamId) {
+                        updatedPlayers.push(storedPlayer);
+                    }
+                });
+
+                if (!newPlayers.length && !updatedPlayers.length) {
+                    console.log('No player data stored.');
+                    return;
+                }
+
+                if (newPlayers.length) {
+                    await axios.put(`http://localhost:${PORT}/players`, {
+                        action: 'ADD',
+                        players: newPlayers
+                    });
+
+                    console.log(newPlayers.length, 'new players added');
+                }
+
+                if (updatedPlayers.length) {
+                    await axios.put(`http://localhost:${PORT}/players`, {
+                        action: 'UPDATE',
+                        players: updatedPlayers
+                    });
+
+                    console.log(newPlayers.length, 'players updated');
+                }
 
                 console.log('Finished storing players');
             } catch (e) {
                 console.log('Error in PlayerServices run:', e.message);
-                return [];
+                throw new Error(e.message);
             }
 
             await util_timeout(this.delay.toString());
         }
-
-        return players;
     }
 
     async fetchTeamsWithPlayers(TEAMS_NFL_COM: ITeam[]): Promise<IPlayer[][]> {
@@ -130,9 +178,7 @@ export class PlayerCollectionService {
             playerName = name_split.join(' ');
 
             const player: IPlayer = {
-                id: uuidv4()
-                    .split('-')
-                    .join(''),
+                id: '',
                 name: playerName,
                 suffix: maybeSuffix,
                 college: $player
@@ -148,6 +194,9 @@ export class PlayerCollectionService {
                     .find('span span')
                     .text()
             };
+
+            // TODO: Make an actual HEX ID.
+            player.id = player.name + player.college + player.position;
 
             this.totalPlayersScanned++;
 

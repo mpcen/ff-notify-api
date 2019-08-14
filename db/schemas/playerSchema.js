@@ -1,6 +1,7 @@
 const { Schema } = require('mongoose');
 
 const PlayerSchema = new Schema({
+    id: String,
     name: String,
     suffux: String,
     college: String,
@@ -9,10 +10,6 @@ const PlayerSchema = new Schema({
     number: String
 });
 
-const PlayersSchema = new Schema({
-    players: {
-        type: [PlayerSchema]
-    }
-});
+const PlayersSchema = new Schema([PlayerSchema]);
 
 module.exports = PlayersSchema;
