@@ -19,6 +19,11 @@ export interface IPlayer {
     avatarUrl: string;
 }
 
+enum ActionType {
+    ADD = 'ADD',
+    UPDATE = 'UPDATE'
+}
+
 export class PlayerCollectionService {
     runTimes: number;
     delay: number;
@@ -96,7 +101,7 @@ export class PlayerCollectionService {
 
                 if (newPlayers.length) {
                     await axios.put(`http://localhost:${PORT}/players`, {
-                        action: 'ADD',
+                        action: ActionType.ADD,
                         players: newPlayers
                     });
 
@@ -105,7 +110,7 @@ export class PlayerCollectionService {
 
                 if (updatedPlayers.length) {
                     await axios.put(`http://localhost:${PORT}/players`, {
-                        action: 'UPDATE',
+                        action: ActionType.ADD,
                         players: updatedPlayers
                     });
 
