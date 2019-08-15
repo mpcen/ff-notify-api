@@ -7,7 +7,8 @@ const PlayerSchema = new Schema({
     college: String,
     teamId: Number,
     position: String,
-    number: String
+    number: String,
+    avatarUrl: String
 });
 
 const PlayersSchema = new Schema([PlayerSchema]);

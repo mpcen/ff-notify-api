@@ -23,7 +23,8 @@
         "request-promise": "^4.2.4",
         "socket.io": "^2.2.0",
         "typescript": "^3.5.3",
-        "uuidv4": "^4.0.0"
+        "uuidv4": "^4.0.0",
+        "lodash": "^4.17.13"
     },
     "devDependencies": {
         "@types/axios": "^0.14.0",

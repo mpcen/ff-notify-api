@@ -1,6 +1,5 @@
 import * as cheerio from 'cheerio';
 import axios, { AxiosResponse } from 'axios';
-import * as uuidv4 from 'uuidv4';
 
 import { teams as TEAMS_NFL_COM } from './teams';
 import { util_timeout } from '../../util/timeout';
@@ -17,6 +16,7 @@ export interface IPlayer {
     teamId: number;
     number: string;
     position: string;
+    avatarUrl: string;
 }
 
 export class PlayerCollectionService {
@@ -68,6 +68,8 @@ export class PlayerCollectionService {
                 // seed db
                 if (!storedPlayers.length) {
                     await axios.post(`http://localhost:${PORT}/players`, discoveredPlayers);
+
+                    console.log('Seeded players.');
                     return;
                 }
 
@@ -192,7 +194,13 @@ export class PlayerCollectionService {
                     .text(),
                 number: $(elem)
                     .find('span span')
-                    .text()
+                    .text(),
+                avatarUrl:
+                    $player
+                        .children()
+                        .eq(0)
+                        .find('img')
+                        .attr('alt') || ''
             };
 
             // TODO: Make an actual HEX ID.
