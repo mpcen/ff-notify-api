@@ -8,20 +8,17 @@ interface IRecentPlayerNewsArticle {
     platform: string;
     username: string;
     contentId: string;
-    player: string;
+    player: IPlayer;
     content: string;
     time: string;
 }
 
 export async function RecentPlayerNews(
     news: IRecentNewsSource[],
-    players: IPlayer[]
+    storedPlayers: IPlayer[]
 ): Promise<IRecentPlayerNewsArticle[]> {
     const startTime = Logger.time();
-    const recentRelevantNewsCollection: IRecentPlayerNewsArticle[] = [];
-    const playerNames: string[] = [];
-
-    players.forEach(player => playerNames.push(player.name));
+    const recentPlayerNews: IRecentPlayerNewsArticle[] = [];
 
     news.forEach(source => {
         const { username, platform } = source;
@@ -29,16 +26,16 @@ export async function RecentPlayerNews(
         source.tweets.forEach(tweet => {
             const { content, id, time } = tweet;
 
-            for (let i = 0; i < playerNames.length; i++) {
-                const name = playerNames[i];
+            for (let i = 0; i < storedPlayers.length; i++) {
+                const name = storedPlayers[i].name;
                 const regex = new RegExp(name, 'gi');
 
                 if (content.search(regex) > -1) {
-                    recentRelevantNewsCollection.push({
+                    recentPlayerNews.push({
                         platform,
                         username,
                         contentId: id,
-                        player: name,
+                        player: storedPlayers[i],
                         content,
                         time
                     });
@@ -50,7 +47,7 @@ export async function RecentPlayerNews(
     });
 
     try {
-        await axios.post(`http://localhost:${process.env.API_PORT}/recentPlayerNews`, recentRelevantNewsCollection);
+        await axios.post(`http://localhost:${process.env.API_PORT}/recentPlayerNews`, recentPlayerNews);
     } catch (e) {
         console.log('Error in RecentPlayerNews:', e.message);
         return [];
@@ -58,5 +55,5 @@ export async function RecentPlayerNews(
 
     Logger.logRuntime('Player News Service completed in', startTime);
 
-    return recentRelevantNewsCollection;
+    return recentPlayerNews;
 }

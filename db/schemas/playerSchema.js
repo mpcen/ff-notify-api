@@ -13,4 +13,4 @@ const PlayerSchema = new Schema({
 
 const PlayersSchema = new Schema([PlayerSchema]);
 
-module.exports = PlayersSchema;
+module.exports = { PlayerSchema, PlayersSchema };

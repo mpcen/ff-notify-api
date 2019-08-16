@@ -7,7 +7,8 @@
         "api-inspect": "SET API_PORT=3000&&SET WEBSOCKET_PORT=3001&& nodemon --inspect -r ts-node/register ./api/index.js",
         "player-service-inspect": "node --inspect=0.0.0.0:9228 -r ts-node/register ./services/playercollection/index.ts",
         "player-service": "ts-node ./services/playercollection/index.ts",
-        "services-watch": "SET API_PORT=3000&& nodemon ./dist/services.js",
+        "services-watch": "SET API_PORT=3000&& ts-node ./services/index.ts",
+        "services-inspect": "SET API_PORT=3000&& node --inspect=0.0.0.0:9228 -r ts-node/register ./services/index.ts",
         "websocket-listener-dev-watch": "SET WEBSOCKET_PORT=3001&& nodemon ./dist/socketListener.js"
     },
     "dependencies": {

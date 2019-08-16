@@ -9,10 +9,10 @@ import { RecentPlayerNews } from './RecentPlayerNews/RecentPlayerNewsService';
     const API_PORT = process.env.API_PORT || 3000;
     const TIMEOUT = process.env.TIMEOUT || '10000';
     const recentNewsService = new RecentNewsService({ runTimes: 1, delay: 0 });
-    let response: AxiosResponse;
+    let storedPlayersResponse: AxiosResponse;
 
     try {
-        response = await axios.get(`http://localhost:${API_PORT}/players`);
+        storedPlayersResponse = await axios.get(`http://localhost:${API_PORT}/players`);
     } catch (e) {
         console.log('Error in main playersResponse:', e);
     }
@@ -24,7 +24,7 @@ import { RecentPlayerNews } from './RecentPlayerNews/RecentPlayerNewsService';
 
         try {
             recentNews = await recentNewsService.run();
-            await RecentPlayerNews(recentNews, response.data[0].players);
+            await RecentPlayerNews(recentNews, storedPlayersResponse.data);
         } catch (e) {
             console.log('Error main:', e);
         }
