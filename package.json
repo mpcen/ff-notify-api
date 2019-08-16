@@ -3,7 +3,7 @@
         "start-watch": "concurrently \"yarn:build-dev-watch\" \"yarn:api-dev-watch\" \"yarn:services-dev-watch\" \"yarn:websocket-listener-dev-watch\" ",
         "build": "webpack --config webpack.config.js",
         "build-watch": "webpack --config webpack.config.js --watch",
-        "api-watch": "SET API_PORT=3000&&SET WEBSOCKET_PORT=3001&& ts-node ./api/index.js",
+        "api-watch": "SET API_PORT=3000&&SET WEBSOCKET_PORT=3001&& nodemon -r ts-node/register ./api/index.js",
         "api-inspect": "SET API_PORT=3000&&SET WEBSOCKET_PORT=3001&& nodemon --inspect -r ts-node/register ./api/index.js",
         "player-service-inspect": "node --inspect=0.0.0.0:9228 -r ts-node/register ./services/playercollection/index.ts",
         "player-service": "ts-node ./services/playercollection/index.ts",

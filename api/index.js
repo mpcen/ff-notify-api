@@ -103,22 +103,21 @@ app.get('/recentPlayerNews', async (req, res) => {
 
 app.post('/recentPlayerNews', async (req, res) => {
     try {
-        const $currentRecentPlayerNews = await RecentPlayerNews.find();
+        const storedRecentPlayerNews = await RecentPlayerNews.find();
         const newRecentPlayerNews = [];
 
-        if (!$currentRecentPlayerNews.length) {
-            await RecentPlayerNews.create(req.body);
-            await RecentNews.deleteOne();
+        if (!storedRecentPlayerNews.length) {
+            const doc = await RecentPlayerNews.create(req.body);
 
             console.log('Stored', req.body.length, 'new recent player news items');
-            return res.sendStatus(200);
+            return res.send(doc);
         }
 
         req.body.forEach(incomingRecentPlayerNewsItem => {
-            const item = $currentRecentPlayerNews.find($currentRecentPlayerNewsItem => {
+            const item = storedRecentPlayerNews.find(storedRecentPlayerNewsItem => {
                 return (
-                    $currentRecentPlayerNewsItem.platform === incomingRecentPlayerNewsItem.platform &&
-                    $currentRecentPlayerNewsItem.contentId === incomingRecentPlayerNewsItem.contentId
+                    storedRecentPlayerNewsItem.platform === incomingRecentPlayerNewsItem.platform &&
+                    storedRecentPlayerNewsItem.contentId === incomingRecentPlayerNewsItem.contentId
                 );
             });
 
