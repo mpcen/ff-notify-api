@@ -14,33 +14,6 @@ const { emitter } = require('../websocket/index.ts');
 
 app.use(bodyParser.json({ limit: '999kb' }));
 
-app.get('/recentNews', async (req, res) => {
-    try {
-        const response = await RecentNews.find();
-        res.send(response);
-    } catch (e) {
-        console.log('Error in GET /recentNews:', e);
-        res.sendStatus(500);
-    }
-});
-
-app.post('/recentNews', async (req, res) => {
-    const recentNews = new RecentNews({
-        name: 'twitter',
-        recentNews: req.body.recentNews
-    });
-
-    try {
-        await recentNews.save();
-    } catch (e) {
-        console.log('Error from POST /recentNews:', e);
-        res.sendStatus(500);
-    }
-    console.log('Stored new Twitter Data');
-
-    return res.sendStatus(200);
-});
-
 app.get('/players', async (req, res) => {
     try {
         const response = await Players.find();
@@ -139,5 +112,32 @@ app.post('/recentPlayerNews', async (req, res) => {
         res.sendStatus(500);
     }
 });
+
+// app.get('/recentNews', async (req, res) => {
+//     try {
+//         const response = await RecentNews.find();
+//         res.send(response);
+//     } catch (e) {
+//         console.log('Error in GET /recentNews:', e);
+//         res.sendStatus(500);
+//     }
+// });
+
+// app.post('/recentNews', async (req, res) => {
+//     const recentNews = new RecentNews({
+//         name: 'twitter',
+//         recentNews: req.body.recentNews
+//     });
+
+//     try {
+//         await recentNews.save();
+//     } catch (e) {
+//         console.log('Error from POST /recentNews:', e);
+//         res.sendStatus(500);
+//     }
+//     console.log('Stored new Twitter Data');
+
+//     return res.sendStatus(200);
+// });
 
 app.listen(PORT, () => console.log('API Running at:', `http://localhost:${PORT}`));
