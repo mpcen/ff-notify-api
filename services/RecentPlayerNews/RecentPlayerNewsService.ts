@@ -55,6 +55,5 @@ export async function RecentPlayerNews(
 
     Logger.logRuntime('Player News Service completed in', startTime);
 
-    console.log(recentPlayerNews);
     return recentPlayerNews;
 }
