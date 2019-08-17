@@ -25,6 +25,7 @@ enum ActionType {
 }
 
 export class PlayerCollectionService {
+    private readonly DEFAULT_AVATAR_URL = 'https://a.espncdn.com/combiner/i?img=/i/headshots/nophoto.png&w=200&h=146';
     runTimes: number;
     delay: number;
     totalTeamsScanned: number;
@@ -205,7 +206,7 @@ export class PlayerCollectionService {
                         .children()
                         .eq(0)
                         .find('img')
-                        .attr('alt') || ''
+                        .attr('alt') || this.DEFAULT_AVATAR_URL
             };
 
             // TODO: Make an actual HEX ID.
