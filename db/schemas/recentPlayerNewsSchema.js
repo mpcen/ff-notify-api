@@ -1,5 +1,5 @@
 const { Schema } = require('mongoose');
-const { PlayerSchema } = require('./playerSchema');
+const PlayerSchema = require('./playerSchema');
 
 const RecentPlayerNewsSchema = new Schema({
     platform: String,

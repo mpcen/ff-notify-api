@@ -9,34 +9,26 @@ mongoose.connection.once('open', () => console.log('Connected to DB'));
 
 const RecentNews = require('../db/models/RecentNews');
 const RecentPlayerNews = require('../db/models/RecentPlayerNews');
-const Players = require('../db/models/Players');
+const Player = require('../db/models/Player');
 const { emitter } = require('../websocket/index.ts');
 
 app.use(bodyParser.json({ limit: '999kb' }));
 
 app.get('/players', async (req, res) => {
     try {
-        const response = await Players.find();
-
-        if (!response) {
-            res.send(201);
-        } else {
-            res.send(response);
-        }
+        const response = await Player.find();
+        res.send(response);
     } catch (e) {
-        console.log('Error from GET /players:', e.message);
+        console.log('Error from GET /players:', e);
         res.sendStatus(500);
     }
 });
 
 app.post('/players', async (req, res) => {
-    const players = req.body;
-
     try {
-        const doc = await Players.create(players);
-
+        const doc = await Player.insertMany(req.body);
         console.log('Stored new Player Data');
-        return res.send(doc);
+        res.send(doc);
     } catch (e) {
         console.log('Error from POST /players:', e);
         res.sendStatus(501);
@@ -52,9 +44,7 @@ app.put('/players', async (req, res) => {
 
             res.send(doc);
         } else if (action === 'UPDATE') {
-            const doc = await Promise.all(
-                players.map(({ id, teamId }) => Players.findOneAndUpdate({ id }, { teamId }))
-            );
+            const doc = await Promise.all(players.map(({ id, teamId }) => Player.findOneAndUpdate({ id }, { teamId })));
 
             res.send(players);
         }
