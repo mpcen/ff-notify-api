@@ -104,4 +104,4 @@ app.post('/recentPlayerNews', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => console.log('API Running at:', `http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`API running on PORT: ${PORT}`));
