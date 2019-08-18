@@ -41,7 +41,7 @@ app.put('/players', async (req, res) => {
 
     try {
         if (action === 'ADD') {
-            const doc = await Players.insertMany(players);
+            const doc = await Player.insertMany(players);
 
             res.send(doc);
         } else if (action === 'UPDATE') {

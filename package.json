@@ -5,8 +5,8 @@
     "license": "MIT",
     "scripts": {
         "start": "node ./src/index.js",
-        "api-watch": "nodemon ./src/index.js",
-        "api-inspect": "nodemon --inspect -r ./src/index.js",
+        "dev": "nodemon ./src/index.js",
+        "dev-inspect": "nodemon --inspect -r ./src/index.js",
         "websocket-listener-dev-watch": "nodemon ./dist/socketListener.js"
     },
     "engines": {
