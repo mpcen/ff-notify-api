@@ -1,5 +1,12 @@
 export const TWITTER_SOURCES = [
-    // 'TeamMouseplay'
+    'AdamSchefter',
+    'Rotoworld',
+    'BleacherReport',
+    'FantasyPros',
+    'rotoballernfl',
+    'RotoGrinders',
+    'FantasyProsNFL',
+    'TeamMouseplay'
     // 'Scott_WinterNFL',
     // 'Marcel_LJ',
     // 'BuffaloBills',
@@ -184,7 +191,7 @@ export const TWITTER_SOURCES = [
     // 'mrhill9169',
     // 'TheQuantEdge',
     // 'DataForceff',
-    // 'FantasyPros',
+
     // 'DraftConsultInc',
     // 'fbgwood',
     // 'rotounderworld',
@@ -224,13 +231,12 @@ export const TWITTER_SOURCES = [
     // 'spitballerspod',
     // 'Envisionff',
     // 'fantasyhotread',
-    // 'rotoballernfl',
+
     // 'razzball',
     // 'cfrelund',
     // 'beerswater',
     // 'RotoViz',
-    // 'RotoGrinders',
-    // 'FantasyProsNFL',
+
     // 'HarrisFootball',
     // 'daltondeldon',
     // 'MikeTanier',
@@ -287,7 +293,7 @@ export const TWITTER_SOURCES = [
     // 'SigmundBloom',
     // 'MyFantasyLeague',
     // 'RyanMc23',
-    'Rotoworld',
+
     // 'DynastyScouts',
     // 'DynoBlueprint',
     // 'DLFPodcast',
@@ -299,7 +305,7 @@ export const TWITTER_SOURCES = [
     // 'MatthewBerryTMR',
     // 'fantasylifeapp',
     // 'TheMattCamp',
-    // 'BleacherReport',
+
     // 'BustedOpenRadio',
     // 'HouseofHardcore',
     // 'StarProLLC',
@@ -312,7 +318,7 @@ export const TWITTER_SOURCES = [
     // 'Shawn__Childs',
     // 'PlayFFWC',
     // 'NFLFantasy',
-    'AdamSchefter'
+
     // 'adamrank',
     // 'gmfb',
     // 'Michael_Fabiano',

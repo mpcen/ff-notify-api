@@ -1,5 +1,6 @@
 const path = require('path');
 var fs = require('fs');
+const Dotenv = require('dotenv-webpack');
 
 // Read more about what is going on here @
 // https://jlongster.com/Backend-Apps-with-Webpack--Part-I#Getting-Started
@@ -13,13 +14,13 @@ fs.readdirSync('node_modules')
     });
 
 module.exports = {
-    mode: 'development',
+    mode: 'production',
     target: 'node',
     entry: {
-        api: './api/index.js',
-        services: './services/index.ts',
-        socketListener: './websocket/listener.ts',
-        playerCollection: './services/PlayerCollection/index.ts'
+        api: './api/index.js'
+        // services: './services/index.ts'
+        // socketListener: './websocket/listener.ts',
+        // playerCollection: './services/PlayerCollection/index.ts'
     },
     devtool: 'inline-source-map',
     module: {
@@ -37,5 +38,6 @@ module.exports = {
         filename: '[name].js',
         path: path.resolve(__dirname, 'dist')
     },
-    externals: nodeModules
+    externals: nodeModules,
+    plugins: [new Dotenv()]
 };

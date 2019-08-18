@@ -1,16 +1,22 @@
+require('dotenv').config();
 const app = require('express')();
 const PORT = process.env.API_PORT || 3000;
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/FFNotify', { useNewUrlParser: true, useFindAndModify: false });
+mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useFindAndModify: false });
 mongoose.connection.on('err', console.error.bind(console, 'DB connection error:'));
 mongoose.connection.once('open', () => console.log('Connected to DB'));
 
 const RecentNews = require('../db/models/RecentNews');
 const RecentPlayerNews = require('../db/models/RecentPlayerNews');
 const Player = require('../db/models/Player');
-const { emitter } = require('../websocket/index.ts');
+//const { emitter } = require('../websocket/index.ts');
+
+if (process.env.NODE_ENV === 'production') {
+    console.log('prod');
+    require('../services/index.ts');
+}
 
 app.use(bodyParser.json({ limit: '999kb' }));
 

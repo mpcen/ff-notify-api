@@ -6,7 +6,7 @@ import { util_timeout } from '../../util/timeout';
 import { SUFFIXES } from '../../util/suffixes';
 import { ITeam } from './teams';
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.API_PORT || 3000;
 
 export interface IPlayer {
     id: string;
