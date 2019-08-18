@@ -6,7 +6,7 @@
     "scripts": {
         "start": "node ./dist/index.js",
         "start-dev": "concurrently \"yarn:api-watch\" \"yarn:services-watch\"",
-        "build": "webpack --env.NODE_ENV=production --config webpack.config.js",
+        "build-dev": "webpack --env.NODE_ENV=production --config webpack.config.js",
         "api-watch": "nodemon ./src/api/index.js",
         "api-inspect": "nodemon --inspect -r ts-node/register ./api/index.js",
         "player-service-inspect": "node --inspect=0.0.0.0:9228 -r ts-node/register ./services/playercollection/index.ts",
