@@ -1,10 +1,10 @@
 {
     "name": "ff-notify-api",
     "version": "1.0.0",
-    "author": "manny martinez <vccengineers12@gmail.com>",
+    "author": "manny martinez <emmanuelmartinez.dev@gmail.com>",
     "license": "MIT",
     "scripts": {
-        "start": "node index.js",
+        "start": "node ./dist/index.js",
         "start-dev": "concurrently \"yarn:api-watch\" \"yarn:services-watch\"",
         "build": "webpack --env.NODE_ENV=production --config webpack.config.js",
         "api-watch": "nodemon ./src/api/index.js",
