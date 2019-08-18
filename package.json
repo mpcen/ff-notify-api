@@ -4,15 +4,9 @@
     "author": "manny martinez <emmanuelmartinez.dev@gmail.com>",
     "license": "MIT",
     "scripts": {
-        "start": "node ./src/api/index.js",
-        "start-dev": "concurrently \"yarn:api-watch\" \"yarn:services-watch\"",
-        "build-dev": "webpack --env.NODE_ENV=production --config webpack.config.js",
-        "api-watch": "nodemon ./src/api/index.js",
-        "api-inspect": "nodemon --inspect -r ts-node/register ./api/index.js",
-        "player-service-inspect": "node --inspect=0.0.0.0:9228 -r ts-node/register ./services/playercollection/index.ts",
-        "player-service": "ts-node ./services/playercollection/index.ts",
-        "services-watch": "ts-node ./services/index.ts",
-        "services-inspect": "node --inspect=0.0.0.0:9228 -r ts-node/register ./services/index.ts",
+        "start": "node ./src/index.js",
+        "api-watch": "nodemon ./src/index.js",
+        "api-inspect": "nodemon --inspect -r ./src/index.js",
         "websocket-listener-dev-watch": "nodemon ./dist/socketListener.js"
     },
     "engines": {
@@ -35,7 +29,6 @@
         "@types/socket.io": "^2.1.2",
         "@types/socket.io-client": "^1.4.32",
         "@types/uuidv4": "^2.0.0",
-        "concurrently": "^4.1.0",
         "dotenv-webpack": "^1.7.0",
         "webpack": "^4.35.0",
         "webpack-cli": "^3.3.5",

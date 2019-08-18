@@ -8,9 +8,9 @@ mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useFindAndModify: 
 mongoose.connection.on('err', console.error.bind(console, 'DB connection error:'));
 mongoose.connection.once('open', () => console.log('Connected to DB'));
 
-const RecentNews = require('../db/models/RecentNews');
-const RecentPlayerNews = require('../db/models/RecentPlayerNews');
-const Player = require('../db/models/Player');
+const RecentNews = require('./db/models/RecentNews');
+const RecentPlayerNews = require('./db/models/RecentPlayerNews');
+const Player = require('./db/models/Player');
 // const { emitter } = require('../websocket/index.ts');
 
 app.use(bodyParser.json({ limit: '999kb' }));
