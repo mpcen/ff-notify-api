@@ -11,12 +11,7 @@ mongoose.connection.once('open', () => console.log('Connected to DB'));
 const RecentNews = require('../db/models/RecentNews');
 const RecentPlayerNews = require('../db/models/RecentPlayerNews');
 const Player = require('../db/models/Player');
-//const { emitter } = require('../websocket/index.ts');
-
-if (process.env.NODE_ENV === 'production') {
-    console.log('prod');
-    require('../services/index.ts');
-}
+// const { emitter } = require('../websocket/index.ts');
 
 app.use(bodyParser.json({ limit: '999kb' }));
 
@@ -95,7 +90,7 @@ app.post('/recentPlayerNews', async (req, res) => {
 
         if (newRecentPlayerNews.length) {
             await RecentPlayerNews.insertMany(newRecentPlayerNews);
-            emitter.emit('alert', newRecentPlayerNews);
+            // emitter.emit('alert', newRecentPlayerNews);
             console.log('Stored', newRecentPlayerNews.length, 'new recent player news items:');
         } else {
             console.log('No new recent player news');
@@ -108,32 +103,5 @@ app.post('/recentPlayerNews', async (req, res) => {
         res.sendStatus(500);
     }
 });
-
-// app.get('/recentNews', async (req, res) => {
-//     try {
-//         const response = await RecentNews.find();
-//         res.send(response);
-//     } catch (e) {
-//         console.log('Error in GET /recentNews:', e);
-//         res.sendStatus(500);
-//     }
-// });
-
-// app.post('/recentNews', async (req, res) => {
-//     const recentNews = new RecentNews({
-//         name: 'twitter',
-//         recentNews: req.body.recentNews
-//     });
-
-//     try {
-//         await recentNews.save();
-//     } catch (e) {
-//         console.log('Error from POST /recentNews:', e);
-//         res.sendStatus(500);
-//     }
-//     console.log('Stored new Twitter Data');
-
-//     return res.sendStatus(200);
-// });
 
 app.listen(PORT, () => console.log('API Running at:', `http://localhost:${PORT}`));
