@@ -1,4 +1,5 @@
 require('dotenv').config();
+
 const app = require('express')();
 const PORT = process.env.PORT || 3000;
 const bodyParser = require('body-parser');
@@ -6,7 +7,7 @@ const mongoose = require('mongoose');
 
 mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useFindAndModify: false });
 mongoose.connection.on('err', console.error.bind(console, 'DB connection error:'));
-mongoose.connection.once('open', () => console.log('Connected to DB'));
+mongoose.connection.once('open', () => console.log('Connected to DB:', process.env.NODE_ENV));
 
 const RecentNews = require('./db/models/RecentNews');
 const RecentPlayerNews = require('./db/models/RecentPlayerNews');
