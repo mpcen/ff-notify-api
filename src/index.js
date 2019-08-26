@@ -32,7 +32,7 @@ app.post('/players', async (req, res) => {
         console.log('Stored new Player Data');
         res.send(doc);
     } catch (e) {
-        console.log('Error from POST /players:', e);
+        console.log('Error from POST /players:', e.message);
         res.sendStatus(501);
     }
 });
