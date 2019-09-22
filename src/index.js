@@ -18,11 +18,13 @@ const requireAuth = require('./middlewares/requireAuth');
 const authRoutes = require('./routes/authRoutes');
 const playerServiceRoutes = require('./routes/playerServiceRoutes');
 const recentPlayerNewsRoutes = require('./routes/recentPlayerNewsRoutes');
+const trackedPlayerRoutes = require('./routes/trackedPlayerRoutes');
 
 app.use(bodyParser.json({ limit: '999kb' }));
 app.use(playerServiceRoutes);
 app.use(authRoutes);
 app.use(recentPlayerNewsRoutes);
+app.use(trackedPlayerRoutes);
 
 app.get('/', requireAuth, (req, res) => {
     res.send(`You email is ${req.user.email}`);

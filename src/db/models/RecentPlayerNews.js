@@ -13,6 +13,4 @@ const recentPlayerNewsSchema = new mongoose.Schema({
 
 const RecentPlayerNews = mongoose.model('RecentPlayerNews', recentPlayerNewsSchema);
 
-module.exports = {
-    RecentPlayerNews
-}
+module.exports = { RecentPlayerNews };
