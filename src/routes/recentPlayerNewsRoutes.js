@@ -1,8 +1,8 @@
 const express = require('express');
 
 const router = express.Router();
-const RecentNews = require('../db/models/RecentNews');
-const RecentPlayerNews = require('../db/models/RecentPlayerNews');
+const { RecentNews } = require('../db/models/RecentNews');
+const { RecentPlayerNews } = require('../db/models/RecentPlayerNews');
 
 router.get('/recentPlayerNews', async (req, res) => {
     try {

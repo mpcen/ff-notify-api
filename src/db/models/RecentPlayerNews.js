@@ -1,5 +1,18 @@
-const { model } = require('mongoose');
-const RecentPlayerNewsSchema = require('../schemas/recentPlayerNewsSchema');
-const RecentPlayerNews = model('RecentPlayerNews', RecentPlayerNewsSchema);
+const mongoose = require('mongoose');
 
-module.exports = RecentPlayerNews;
+const { playerSchema } = require('./Player');
+
+const recentPlayerNewsSchema = new mongoose.Schema({
+    platform: String,
+    username: String,
+    contentId: String,
+    player: playerSchema,
+    content: String,
+    time: String
+});
+
+const RecentPlayerNews = mongoose.model('RecentPlayerNews', recentPlayerNewsSchema);
+
+module.exports = {
+    RecentPlayerNews
+}
