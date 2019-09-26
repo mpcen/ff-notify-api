@@ -16,20 +16,19 @@ const userSchema = new mongoose.Schema({
 userSchema.pre('save', function(next) {
     const user = this;
 
-    if(!user.isModified('password')) {
+    if (!user.isModified('password')) {
         return next();
     }
 
     bcrypt.genSalt(10, (err, salt) => {
-        if(err) {
+        if (err) {
             return next(err);
         }
 
         bcrypt.hash(user.password, salt, (err, hash) => {
-            if(err) {
+            if (err) {
                 return next(err);
             }
-
             user.password = hash;
             next();
         });
@@ -41,19 +40,19 @@ userSchema.methods.comparePassword = function(candidatePassword) {
 
     return new Promise((resolve, reject) => {
         bcrypt.compare(candidatePassword, user.password, (err, isMatch) => {
-            if(err) {
+            if (err) {
                 return reject(err);
             }
 
-            if(!isMatch) {
-                reject(false);
+            if (!isMatch) {
+                return reject(false);
             }
 
             resolve(true);
         });
-    })
-}
+    });
+};
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = { User }
+module.exports = User;
