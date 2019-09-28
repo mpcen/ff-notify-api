@@ -9,17 +9,21 @@ const router = express.Router();
 router.use(requireAuth);
 
 router.get('/trackedPlayers', async (req, res) => {
-    const $trackedPlayers = await TrackedPlayer.find({ userId: req.user._id });
-    const trackedPlayers = await Promise.all(
-        $trackedPlayers.map(async $trackedPlayer => {
-            const { playerId } = $trackedPlayer;
-            const [trackedPlayer] = await Player.find({ id: playerId });
+    try {
+        const $trackedPlayers = await TrackedPlayer.find({ userId: req.user._id });
+        const trackedPlayers = await Promise.all(
+            $trackedPlayers.map(async $trackedPlayer => {
+                const { playerId } = $trackedPlayer;
+                const [trackedPlayer] = await Player.find({ id: playerId });
 
-            return trackedPlayer;
-        })
-    );
+                return trackedPlayer;
+            })
+        );
 
-    res.send(trackedPlayers);
+        res.send(trackedPlayers);
+    } catch (e) {
+        res.status(422).send({ error: 'Error fetching tracked players' });
+    }
 });
 
 router.post('/trackedPlayers', async (req, res) => {

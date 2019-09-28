@@ -8,6 +8,8 @@ const trackedPlayerSchema = new mongoose.Schema({
     playerId: String
 });
 
+trackedPlayerSchema.index({ userId: 1, playerId: 1 }, { unique: true });
+
 const TrackedPlayer = mongoose.model('TrackedPlayer', trackedPlayerSchema);
 
 module.exports = { TrackedPlayer };
