@@ -5,7 +5,7 @@ const trackedPlayerSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    trackedPlayerId: String
+    playerId: String
 });
 
 const TrackedPlayer = mongoose.model('TrackedPlayer', trackedPlayerSchema);

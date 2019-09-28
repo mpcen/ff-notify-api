@@ -2,31 +2,41 @@ const express = require('express');
 
 const requireAuth = require('../middlewares/requireAuth');
 const { TrackedPlayer } = require('../db/models/TrackedPlayer');
+const { Player } = require('../db/models/Player');
 
 const router = express.Router();
 
 router.use(requireAuth);
 
 router.get('/trackedPlayers', async (req, res) => {
-    const trackedPlayers = await TrackedPlayer.find({ userId: req.user._id });
+    const $trackedPlayers = await TrackedPlayer.find({ userId: req.user._id });
+    const trackedPlayers = await Promise.all(
+        $trackedPlayers.map(async $trackedPlayer => {
+            const { playerId } = $trackedPlayer;
+            const [trackedPlayer] = await Player.find({ id: playerId });
+
+            return trackedPlayer;
+        })
+    );
 
     res.send(trackedPlayers);
 });
 
 router.post('/trackedPlayers', async (req, res) => {
-    const { trackedPlayerId } = req.body;
+    const { playerId } = req.body;
 
-    if (!trackedPlayerId) {
+    if (!playerId) {
         return res.status(422).send({
             error: 'You must provide a tracked player ID.'
         });
     }
 
-    const trackedPlayer = new TrackedPlayer({ trackedPlayerId, userId: req.user._id });
+    const trackedPlayer = new TrackedPlayer({ playerId, userId: req.user._id });
+    const [player] = await Player.find({ id: playerId });
 
     try {
         await trackedPlayer.save();
-        res.send(trackedPlayer);
+        res.send(player);
     } catch (e) {
         res.status(422).send({
             error: e.message
@@ -35,17 +45,20 @@ router.post('/trackedPlayers', async (req, res) => {
 });
 
 router.delete('/trackedPlayers', async (req, res) => {
-    const { trackedPlayerId } = req.body;
+    const { playerId } = req.body;
 
-    if (!trackedPlayerId) {
+    if (!playerId) {
         return res.status(422).send({
             error: 'You must provide a tracked player ID.'
         });
     }
 
     try {
-        await TrackedPlayer.deleteOne({ trackedPlayerId });
-        res.status(200).send('Successfully untracked player');
+        await TrackedPlayer.deleteOne({ playerId });
+
+        const [untrackedPlayer] = await Player.find({ id: playerId });
+
+        res.send(untrackedPlayer);
     } catch (e) {
         return res.status(422).send({
             error: 'Error untracking player.'
