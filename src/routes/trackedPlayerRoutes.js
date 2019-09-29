@@ -12,6 +12,11 @@ router.use(requireAuth);
 router.get('/trackedPlayers', async (req, res) => {
     try {
         const [trackedPlayersOrderModel] = await TrackedPlayersOrder.find({ userId: req.user._id });
+
+        if (!trackedPlayersOrderModel) {
+            return res.send([]);
+        }
+
         const orderedTrackedPlayers = await Promise.all(
             trackedPlayersOrderModel.trackedPlayersOrder.map(async orderedTrackedPlayerId => {
                 const [trackedPlayer] = await Player.find({ id: orderedTrackedPlayerId });
