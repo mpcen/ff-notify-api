@@ -11,17 +11,16 @@ router.use(requireAuth);
 
 router.get('/trackedPlayers', async (req, res) => {
     try {
-        const $trackedPlayers = await TrackedPlayer.find({ userId: req.user._id });
-        const trackedPlayers = await Promise.all(
-            $trackedPlayers.map(async $trackedPlayer => {
-                const { playerId } = $trackedPlayer;
-                const [trackedPlayer] = await Player.find({ id: playerId });
+        const [trackedPlayersOrderModel] = await TrackedPlayersOrder.find({ userId: req.user._id });
+        const orderedTrackedPlayers = await Promise.all(
+            trackedPlayersOrderModel.trackedPlayersOrder.map(async orderedTrackedPlayerId => {
+                const [trackedPlayer] = await Player.find({ id: orderedTrackedPlayerId });
 
                 return trackedPlayer;
             })
         );
 
-        res.send(trackedPlayers);
+        res.send(orderedTrackedPlayers);
     } catch (e) {
         res.status(422).send({ error: 'Error fetching tracked players' });
     }
