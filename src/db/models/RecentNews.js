@@ -24,4 +24,4 @@ const RecentNews = mongoose.model('RecentNews', recentNewsSchema);
 
 module.exports = {
     RecentNews
-}
+};

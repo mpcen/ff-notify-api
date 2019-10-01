@@ -6,8 +6,17 @@ const { RecentPlayerNews } = require('../db/models/RecentPlayerNews');
 
 router.get('/recentPlayerNews', async (req, res) => {
     try {
-        const response = await RecentPlayerNews.find();
-        res.send(response);
+        // const { page } = req.query;
+        // const options = {
+        //     page: parseInt(page, 10) || 1,
+        //     limit: 15
+        // };
+
+        // const results = await RecentPlayerNews.paginate({}, options);
+
+        const results = await RecentPlayerNews.find().sort({ 'player.id': 1, time: -1 });
+
+        res.send(results);
     } catch (e) {
         console.log('Error GET /recentPlayerNews:', e);
         res.sendStatus(500);
