@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const tweetSchema = new mongoose.Schema({
     id: String,
-    time: String,
+    time: Date,
     content: String
 });
 
@@ -12,7 +12,7 @@ const twitterUserSchema = new mongoose.Schema({
     username: String,
     verified: Boolean,
     tweets: [tweetSchema],
-    lastActivityTime: String
+    lastActivityTime: Date
 });
 
 const recentNewsSchema = new mongoose.Schema({

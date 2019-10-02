@@ -3,7 +3,6 @@ const express = require('express');
 const requireAuth = require('../middlewares/requireAuth');
 const { TrackedPlayer } = require('../db/models/TrackedPlayer');
 const { TrackedPlayersOrder } = require('../db/models/TrackedPlayersOrder');
-const { Player } = require('../db/models/Player');
 
 const router = express.Router();
 

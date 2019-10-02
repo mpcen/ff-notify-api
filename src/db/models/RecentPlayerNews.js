@@ -9,7 +9,7 @@ const recentPlayerNewsSchema = new mongoose.Schema({
     contentId: String,
     player: playerSchema,
     content: String,
-    time: String
+    time: Date
 });
 
 recentPlayerNewsSchema.index({ 'player.id': 1, time: -1 });

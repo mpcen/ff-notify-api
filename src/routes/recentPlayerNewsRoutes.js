@@ -1,25 +1,43 @@
 const express = require('express');
 
-const router = express.Router();
+const requireAuth = require('../middlewares/requireAuth');
 const { RecentNews } = require('../db/models/RecentNews');
 const { RecentPlayerNews } = require('../db/models/RecentPlayerNews');
+const { TrackedPlayersOrder } = require('../db/models/TrackedPlayersOrder');
 
-router.get('/recentPlayerNews', async (req, res) => {
+const router = express.Router();
+router.use(requireAuth);
+
+// GET /recentPlayerNews
+// Returns an ordered list of recent player news for tracked players.
+// The order is in order of tracked players (taken from trackedPlayerOrder)
+// and by descending ordered date
+router.get('/recentPlayerNewsByPlayer', async (req, res) => {
+    const userId = req.user._id;
+
     try {
-        // const { page } = req.query;
-        // const options = {
-        //     page: parseInt(page, 10) || 1,
-        //     limit: 15
-        // };
+        const trackedPlayersOrderDoc = await TrackedPlayersOrder.findOne({ userId });
+        const orderedRecentPlayerNewsDocs = await Promise.all(
+            trackedPlayersOrderDoc.trackedPlayersOrder.map(async orderedTrackedPlayerId => {
+                const recentPlayerNewsDoc = await RecentPlayerNews.find({
+                    'player.id': orderedTrackedPlayerId
+                }).sort({ time: -1 });
 
-        // const results = await RecentPlayerNews.paginate({}, options);
+                return recentPlayerNewsDoc;
+            })
+        );
 
-        const results = await RecentPlayerNews.find().sort({ 'player.id': 1, time: -1 });
+        const merged = [];
 
-        res.send(results);
+        orderedRecentPlayerNewsDocs.forEach(item => {
+            merged.push(...item);
+        });
+
+        res.send(merged);
     } catch (e) {
-        console.log('Error GET /recentPlayerNews:', e);
-        res.sendStatus(500);
+        return res.status(422).send({
+            error: 'Error fetching recentPlayerNewsForUser'
+        });
     }
 });
 
@@ -29,10 +47,10 @@ router.post('/recentPlayerNews', async (req, res) => {
         const newRecentPlayerNews = [];
 
         if (!storedRecentPlayerNews.length) {
-            const doc = await RecentPlayerNews.create(req.body);
+            const recentPlayerNewsDoc = await RecentPlayerNews.create(req.body);
 
             console.log('Stored', req.body.length, 'new recent player news items');
-            return res.send(doc);
+            return res.send(recentPlayerNewsDoc);
         }
 
         req.body.forEach(incomingRecentPlayerNewsItem => {
