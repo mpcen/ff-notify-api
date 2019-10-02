@@ -8,37 +8,22 @@ const router = express.Router();
 
 router.use(requireAuth);
 
-router.get('/trackedPlayersOrder', async (req, res) => {
-    try {
-        const [trackedPlayersOrderModel] = await TrackedPlayersOrder.find({ userId: req.user._id });
-
-        if (!trackedPlayersOrderModel) {
-            return res.send([]);
-        }
-
-        res.send(trackedPlayersOrderModel);
-    } catch (e) {
-        res.status(422).send({ error: 'Error fetching tracked players order' });
-    }
-});
-
 router.put('/trackedPlayersOrder', async (req, res) => {
-    try {
-        const [trackedPlayersOrderModel] = await TrackedPlayersOrder.find({ userId: req.user._id });
-        const newtrackedPlayersOrder = req.body.trackedPlayersOrder;
+    const userId = req.user._id;
+    const { trackedPlayersOrder } = req.body;
 
-        trackedPlayersOrderModel.trackedPlayersOrder = newtrackedPlayersOrder.map(trackedPlayer => trackedPlayer.id);
+    if (!trackedPlayersOrder) {
+        return res.status(422).send({ error: 'You must provide a list of tracked player ids' });
+    }
+
+    try {
+        const trackedPlayersOrderModel = await TrackedPlayersOrder.findOne({ userId });
+
+        trackedPlayersOrderModel.trackedPlayersOrder = trackedPlayersOrder;
+
         await trackedPlayersOrderModel.save();
 
-        const orderedTrackedPlayers = await Promise.all(
-            trackedPlayersOrderModel.trackedPlayersOrder.map(async orderedTrackedPlayerId => {
-                const [trackedPlayer] = await Player.find({ id: orderedTrackedPlayerId });
-
-                return trackedPlayer;
-            })
-        );
-
-        res.send(orderedTrackedPlayers);
+        res.send(trackedPlayersOrderModel);
     } catch (e) {
         res.status(422).send({ error: 'Error updating tracked players order' });
     }

@@ -9,30 +9,31 @@ const router = express.Router();
 
 router.use(requireAuth);
 
-router.get('/trackedPlayers', async (req, res) => {
+// GET /trackedPlayers
+// Returns back an ORDERED list of tracked player Ids
+router.get('/trackedplayers', async (req, res) => {
+    const userId = req.user._id;
+
     try {
-        const [trackedPlayersOrderModel] = await TrackedPlayersOrder.find({ userId: req.user._id });
+        const trackedPlayersOrderModel = await TrackedPlayersOrder.findOne({ userId });
 
         if (!trackedPlayersOrderModel) {
             return res.send([]);
         }
 
-        const orderedTrackedPlayers = await Promise.all(
-            trackedPlayersOrderModel.trackedPlayersOrder.map(async orderedTrackedPlayerId => {
-                const [trackedPlayer] = await Player.find({ id: orderedTrackedPlayerId });
-
-                return trackedPlayer;
-            })
-        );
-
-        res.send(orderedTrackedPlayers);
+        res.send(trackedPlayersOrderModel);
     } catch (e) {
         res.status(422).send({ error: 'Error fetching tracked players' });
     }
 });
 
-router.post('/trackedPlayers', async (req, res) => {
+// POST /trackedPlayer
+// Adds entry into TrackedPlayer and TrackedPlayersOrder.trackedPlayersOrder
+// unless this is the first time a user is tracking a player. In that case,
+// a TrackedPlayersOrder is created.
+router.post('/trackedPlayer', async (req, res) => {
     const { playerId } = req.body;
+    const userId = req.user._id;
 
     if (!playerId) {
         return res.status(422).send({
@@ -40,38 +41,42 @@ router.post('/trackedPlayers', async (req, res) => {
         });
     }
 
-    const trackedPlayerDoc = new TrackedPlayer({ playerId, userId: req.user._id });
-    const [playerModel] = await Player.find({ id: playerId });
-    const [trackedPlayersOrderModel] = await TrackedPlayersOrder.find({ userId: req.user._id });
-
-    if (!trackedPlayersOrderModel) {
-        try {
-            const trackedPlayersOrderDoc = new TrackedPlayersOrder({
-                userId: req.user._id,
-                trackedPlayersOrder: [playerId]
-            });
-
-            await trackedPlayersOrderDoc.save();
-        } catch (e) {
-            res.status(422).send({
-                error: e.message
-            });
-        }
-    } else {
-        trackedPlayersOrderModel.trackedPlayersOrder.push(playerId);
-
-        try {
-            await trackedPlayersOrderModel.save();
-        } catch (e) {
-            return res.status(422).send({
-                error: 'Error adding a new trackedPlayersOrder'
-            });
-        }
-    }
+    const trackedPlayerDoc = new TrackedPlayer({ playerId, userId });
 
     try {
         await trackedPlayerDoc.save();
-        res.send(playerModel);
+
+        const usersTrackedPlayersOrderModel = await TrackedPlayersOrder.findOne({ userId });
+
+        // If its the first time a user is tracking a player
+        if (!usersTrackedPlayersOrderModel) {
+            try {
+                const usersTrackedPlayersOrderDoc = new TrackedPlayersOrder({
+                    userId,
+                    trackedPlayersOrder: [playerId]
+                });
+
+                await usersTrackedPlayersOrderDoc.save();
+            } catch (e) {
+                res.status(422).send({
+                    error: e.message
+                });
+            }
+            // User already has tracked a player (has a trackedPlayersOrder model), push new playerId to
+            // existing usersTrackedPlayersOrderModel isntead
+        } else {
+            usersTrackedPlayersOrderModel.trackedPlayersOrder.push(playerId);
+
+            try {
+                await usersTrackedPlayersOrderModel.save();
+            } catch (e) {
+                return res.status(422).send({
+                    error: 'Error adding a new trackedPlayersOrder'
+                });
+            }
+        }
+
+        res.send(trackedPlayerDoc);
     } catch (e) {
         res.status(422).send({
             error: e.message
@@ -79,8 +84,12 @@ router.post('/trackedPlayers', async (req, res) => {
     }
 });
 
-router.delete('/trackedPlayers', async (req, res) => {
+// DELETE /trackedPlayer
+// Deletes entry from TrackedPlayer and filters out
+// the tracked player from TrackedPlayersOrder.trackedPlayersOrder
+router.delete('/trackedPlayer', async (req, res) => {
     const { playerId } = req.body;
+    const userId = req.user._id;
 
     if (!playerId) {
         return res.status(422).send({
@@ -89,18 +98,18 @@ router.delete('/trackedPlayers', async (req, res) => {
     }
 
     try {
-        const [untrackedPlayerModel] = await Player.find({ id: playerId });
-        const [trackedPlayersOrderModel] = await TrackedPlayersOrder.find({ userId: req.user._id });
-        const newtrackedPlayersOrder = trackedPlayersOrderModel.trackedPlayersOrder.filter(trackedPlayerId => {
-            return trackedPlayerId !== playerId;
-        });
+        const trackedPlayerDoc = await TrackedPlayer.findOneAndDelete({ userId, playerId });
+        const trackedPlayersOrderDoc = await TrackedPlayersOrder.findOne({ userId });
 
-        trackedPlayersOrderModel.trackedPlayersOrder = newtrackedPlayersOrder;
+        const filteredTrackedPlayersOrder = trackedPlayersOrderDoc.trackedPlayersOrder.filter(
+            _playerId => _playerId !== playerId
+        );
 
-        await TrackedPlayer.deleteOne({ playerId });
-        await trackedPlayersOrderModel.save();
+        trackedPlayersOrderDoc.trackedPlayersOrder = filteredTrackedPlayersOrder;
 
-        res.send(untrackedPlayerModel);
+        await trackedPlayersOrderDoc.save();
+
+        res.send(trackedPlayerDoc);
     } catch (e) {
         return res.status(422).send({
             error: 'Error untracking player.'
