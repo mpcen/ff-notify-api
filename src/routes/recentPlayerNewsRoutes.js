@@ -4,6 +4,8 @@ const requireAuth = require('../middlewares/requireAuth');
 const { RecentNews } = require('../db/models/RecentNews');
 const { RecentPlayerNews } = require('../db/models/RecentPlayerNews');
 const { TrackedPlayersOrder } = require('../db/models/TrackedPlayersOrder');
+const { TrackedPlayer } = require('../db/models/TrackedPlayer');
+const { asyncForEach } = require('../util/asyncForEach');
 
 const router = express.Router();
 router.use(requireAuth);
@@ -12,70 +14,88 @@ router.use(requireAuth);
 // Returns an ordered list of recent player news for tracked players.
 // The order is in order of tracked players (taken from trackedPlayerOrder)
 // and by descending ordered date
-router.get('/recentPlayerNewsByPlayer', async (req, res) => {
+router.get('/recentPlayerNews', async (req, res) => {
     const userId = req.user._id;
+    const timelineSortBy = req.user.preferences.timelineSortBy;
 
-    try {
-        const trackedPlayersOrderDoc = await TrackedPlayersOrder.findOne({ userId });
-        const orderedRecentPlayerNewsDocs = await Promise.all(
-            trackedPlayersOrderDoc.trackedPlayersOrder.map(async orderedTrackedPlayerId => {
-                const recentPlayerNewsDoc = await RecentPlayerNews.find({
-                    'player.id': orderedTrackedPlayerId
-                }).sort({ time: -1 });
+    if (timelineSortBy === 0) {
+        const { page } = req.query;
+        const options = {
+            page: parseInt(page) || 1,
+            limit: 15,
+            sort: { time: -1 }
+        };
 
-                return recentPlayerNewsDoc;
-            })
-        );
+        try {
+            const trackedPlayersOrderDoc = await TrackedPlayersOrder.findOne({ userId });
+            const recentPlayerNewsDoc = await RecentPlayerNews.paginate(
+                {
+                    'player.id': {
+                        $in: trackedPlayersOrderDoc.trackedPlayersOrder
+                    }
+                },
+                options
+            );
 
-        const merged = [];
+            res.send(recentPlayerNewsDoc);
+        } catch (e) {
+            console.log(e);
 
-        orderedRecentPlayerNewsDocs.forEach(item => {
-            merged.push(...item);
-        });
+            return res.status(422).send({
+                error: 'Error fetching recentPlayerNewsForUser by Date'
+            });
+        }
+    } else if (timelineSortBy === 1) {
+        try {
+            const trackedPlayersOrderDoc = await TrackedPlayersOrder.findOne({ userId });
+            const orderedRecentPlayerNewsDocs = await Promise.all(
+                trackedPlayersOrderDoc.trackedPlayersOrder.map(async orderedTrackedPlayerId => {
+                    const recentPlayerNewsDoc = await RecentPlayerNews.find({
+                        'player.id': orderedTrackedPlayerId
+                    }).sort({ time: -1 });
 
-        res.send(merged);
-    } catch (e) {
+                    return recentPlayerNewsDoc;
+                })
+            );
+
+            const merged = [];
+
+            orderedRecentPlayerNewsDocs.forEach(item => {
+                merged.push(...item);
+            });
+
+            res.send(merged);
+        } catch (e) {
+            return res.status(422).send({
+                error: 'Error fetching recentPlayerNewsForUser by Player'
+            });
+        }
+    } else {
         return res.status(422).send({
-            error: 'Error fetching recentPlayerNewsForUser'
+            error: 'Unknown Error when fetching recentPlayerNewsForUser'
         });
     }
 });
 
+// POST /recentPlayerNews
+// Posts a list of recent player news
+// req.body contains the payload of scraped/built recent player news
+// which can cantain already-stored recent player news
 router.post('/recentPlayerNews', async (req, res) => {
+    const recentPlayerNews = req.body;
+    let storedRecords = 0;
+
     try {
-        const storedRecentPlayerNews = await RecentPlayerNews.find();
-        const newRecentPlayerNews = [];
-
-        if (!storedRecentPlayerNews.length) {
-            const recentPlayerNewsDoc = await RecentPlayerNews.create(req.body);
-
-            console.log('Stored', req.body.length, 'new recent player news items');
-            return res.send(recentPlayerNewsDoc);
-        }
-
-        req.body.forEach(incomingRecentPlayerNewsItem => {
-            const item = storedRecentPlayerNews.find(storedRecentPlayerNewsItem => {
-                return (
-                    storedRecentPlayerNewsItem.platform === incomingRecentPlayerNewsItem.platform &&
-                    storedRecentPlayerNewsItem.contentId === incomingRecentPlayerNewsItem.contentId
-                );
-            });
-
-            if (!item) newRecentPlayerNews.push(incomingRecentPlayerNewsItem);
+        await asyncForEach(recentPlayerNews, async recentPlayerNewsArticle => {
+            try {
+                await RecentPlayerNews.create(recentPlayerNewsArticle);
+                storedRecords++;
+            } catch (e) {}
         });
 
-        if (newRecentPlayerNews.length) {
-            await RecentPlayerNews.insertMany(newRecentPlayerNews);
-            // emitter.emit('alert', newRecentPlayerNews);
-            console.log('Stored', newRecentPlayerNews.length, 'new recent player news items:');
-        } else {
-            console.log('No new recent player news');
-        }
-
-        await RecentNews.deleteOne();
+        console.log('Stored', storedRecords, 'new recent player news items');
         res.sendStatus(200);
     } catch (e) {
-        console.log('Error in POST /recentPlayerNews:', e);
         res.sendStatus(500);
     }
 });

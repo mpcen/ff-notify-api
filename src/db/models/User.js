@@ -10,8 +10,16 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    preferences: {
+        timelineSortBy: {
+            type: Number,
+            default: 0
+        }
     }
 });
+
+userSchema.index({ email: 1 }, { unique: true });
 
 userSchema.pre('save', function(next) {
     const user = this;
@@ -54,5 +62,13 @@ userSchema.methods.comparePassword = function(candidatePassword) {
 };
 
 const User = mongoose.model('User', userSchema);
+
+User.on('index', function(err) {
+    if (err) {
+        console.error('User index error: %s', err);
+    } else {
+        console.info('User indexing complete');
+    }
+});
 
 module.exports = User;

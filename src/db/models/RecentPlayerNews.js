@@ -12,7 +12,9 @@ const recentPlayerNewsSchema = new mongoose.Schema({
     time: Date
 });
 
+recentPlayerNewsSchema.index({ contentId: 1, platform: 1 }, { unique: true });
 recentPlayerNewsSchema.index({ 'player.id': 1, time: -1 });
+recentPlayerNewsSchema.index({ time: -1 });
 recentPlayerNewsSchema.plugin(mongoosePaginate);
 
 const RecentPlayerNews = mongoose.model('RecentPlayerNews', recentPlayerNewsSchema);
