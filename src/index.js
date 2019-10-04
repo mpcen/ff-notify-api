@@ -11,14 +11,14 @@ const authRoutes = require('./routes/authRoutes');
 const playerServiceRoutes = require('./routes/playerServiceRoutes');
 const recentPlayerNewsRoutes = require('./routes/recentPlayerNewsRoutes');
 const trackedPlayerRoutes = require('./routes/trackedPlayerRoutes');
-const trackedPlayersOrderRoutes = require('./routes/trackedPlayersOrderRoutes');
+const userPreferencesRoutes = require('./routes/userPreferencesRoutes');
 
 app.use(bodyParser.json({ limit: '999kb' }));
 app.use(authRoutes);
 app.use(playerServiceRoutes);
 app.use(recentPlayerNewsRoutes);
 app.use(trackedPlayerRoutes);
-app.use(trackedPlayersOrderRoutes);
+app.use(userPreferencesRoutes);
 
 mongoose.connect(process.env.DB_URI, {
     useNewUrlParser: true,

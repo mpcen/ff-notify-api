@@ -1,36 +1,40 @@
 const express = require('express');
 
 const requireAuth = require('../middlewares/requireAuth');
-const { TrackedPlayer } = require('../db/models/TrackedPlayer');
-const { TrackedPlayersOrder } = require('../db/models/TrackedPlayersOrder');
+const { UserPreferences } = require('../db/models/UserPreferences');
 
 const router = express.Router();
 
 router.use(requireAuth);
 
-// GET /trackedPlayers
-// Returns back an ORDERED list of tracked player Ids
-router.get('/trackedplayers', async (req, res) => {
+// PUT /trackedPlayers
+// Updates UserPreferences.trackedPlayer
+// most likely from resorting on the client
+// Returns updated trackedPlayers list
+router.put('/trackedplayers', async (req, res) => {
     const userId = req.user._id;
+    const trackedPlayers = req.body;
+
+    if (!trackedPlayers) {
+        return res.status(422).send({ error: 'You must provide a list of tracked player ids' });
+    }
 
     try {
-        const trackedPlayersOrderModel = await TrackedPlayersOrder.findOne({ userId });
+        const userPreferencesDoc = await UserPreferences.findOne({ userId });
+        userPreferencesDoc.trackedPlayers = trackedPlayers;
 
-        if (!trackedPlayersOrderModel) {
-            return res.send([]);
-        }
+        await userPreferencesDoc.save();
 
-        res.send(trackedPlayersOrderModel);
+        res.send(userPreferencesDoc.trackedPlayers);
     } catch (e) {
-        res.status(422).send({ error: 'Error fetching tracked players' });
+        res.status(422).send({ error: 'Error updating tracked players' });
     }
 });
 
 // POST /trackedPlayer
-// Adds entry into TrackedPlayer and TrackedPlayersOrder.trackedPlayersOrder
-// unless this is the first time a user is tracking a player. In that case,
-// a TrackedPlayersOrder is created.
-router.post('/trackedPlayer', async (req, res) => {
+// Adds entry into UserPreferences.trackedPlayer
+// Returns updated trackedPlayers list
+router.post('/trackPlayer', async (req, res) => {
     const { playerId } = req.body;
     const userId = req.user._id;
 
@@ -40,52 +44,24 @@ router.post('/trackedPlayer', async (req, res) => {
         });
     }
 
-    const trackedPlayerDoc = new TrackedPlayer({ playerId, userId });
-
     try {
-        await trackedPlayerDoc.save();
+        const userPreferencesDoc = await UserPreferences.findOne({ userId });
 
-        const usersTrackedPlayersOrderModel = await TrackedPlayersOrder.findOne({ userId });
+        userPreferencesDoc.trackedPlayers.push(playerId);
 
-        // If its the first time a user is tracking a player
-        if (!usersTrackedPlayersOrderModel) {
-            try {
-                const usersTrackedPlayersOrderDoc = new TrackedPlayersOrder({
-                    userId,
-                    trackedPlayersOrder: [playerId]
-                });
+        await userPreferencesDoc.save();
 
-                await usersTrackedPlayersOrderDoc.save();
-            } catch (e) {
-                res.status(422).send({
-                    error: e.message
-                });
-            }
-            // User already has tracked a player (has a trackedPlayersOrder model), push new playerId to
-            // existing usersTrackedPlayersOrderModel isntead
-        } else {
-            usersTrackedPlayersOrderModel.trackedPlayersOrder.push(playerId);
-
-            try {
-                await usersTrackedPlayersOrderModel.save();
-            } catch (e) {
-                return res.status(422).send({
-                    error: 'Error adding a new trackedPlayersOrder'
-                });
-            }
-        }
-
-        res.send(trackedPlayerDoc);
+        res.send(userPreferencesDoc.trackedPlayers);
     } catch (e) {
         res.status(422).send({
-            error: e.message
+            error: 'Error tracking player: ' + e.message
         });
     }
 });
 
 // DELETE /trackedPlayer
-// Deletes entry from TrackedPlayer and filters out
-// the tracked player from TrackedPlayersOrder.trackedPlayersOrder
+// Deletes item from UserPreferences.trackedPlayer
+// Returns updated trackedPlayers list
 router.delete('/trackedPlayer', async (req, res) => {
     const { playerId } = req.body;
     const userId = req.user._id;
@@ -97,21 +73,18 @@ router.delete('/trackedPlayer', async (req, res) => {
     }
 
     try {
-        const trackedPlayerDoc = await TrackedPlayer.findOneAndDelete({ userId, playerId });
-        const trackedPlayersOrderDoc = await TrackedPlayersOrder.findOne({ userId });
+        const userPreferencesDoc = await UserPreferences.findOne({ userId });
 
-        const filteredTrackedPlayersOrder = trackedPlayersOrderDoc.trackedPlayersOrder.filter(
+        userPreferencesDoc.trackedPlayers = userPreferencesDoc.trackedPlayers.filter(
             _playerId => _playerId !== playerId
         );
 
-        trackedPlayersOrderDoc.trackedPlayersOrder = filteredTrackedPlayersOrder;
+        await userPreferencesDoc.save();
 
-        await trackedPlayersOrderDoc.save();
-
-        res.send(trackedPlayerDoc);
+        res.send(userPreferencesDoc.trackedPlayers);
     } catch (e) {
-        return res.status(422).send({
-            error: 'Error untracking player.'
+        res.status(422).send({
+            error: 'Error tracking player: ' + e.message
         });
     }
 });

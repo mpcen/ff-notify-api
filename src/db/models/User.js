@@ -10,12 +10,6 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    },
-    preferences: {
-        timelineSortBy: {
-            type: Number,
-            default: 0
-        }
     }
 });
 
@@ -71,4 +65,4 @@ User.on('index', function(err) {
     }
 });
 
-module.exports = User;
+module.exports = { User };

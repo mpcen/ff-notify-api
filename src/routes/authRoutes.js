@@ -1,7 +1,8 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 
-const User = require('../db/models/User');
+const { User } = require('../db/models/User');
+const { UserPreferences } = require('../db/models/UserPreferences');
 const router = express.Router();
 
 router.post('/signup', async (req, res) => {
@@ -13,7 +14,11 @@ router.post('/signup', async (req, res) => {
 
     try {
         const user = new User({ email, password });
+        const userId = user._id;
+        const userPreferences = new UserPreferences({ userId });
+
         await user.save();
+        await userPreferences.save();
 
         const token = jwt.sign({ userId: user._id }, 'APP_SECRET');
 
