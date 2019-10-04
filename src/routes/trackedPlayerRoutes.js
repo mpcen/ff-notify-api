@@ -25,7 +25,7 @@ router.put('/trackedplayers', async (req, res) => {
 
         await userPreferencesDoc.save();
 
-        res.send(userPreferencesDoc.trackedPlayers);
+        res.send(userPreferencesDoc);
     } catch (e) {
         res.status(422).send({ error: 'Error updating tracked players' });
     }
@@ -51,7 +51,7 @@ router.post('/trackPlayer', async (req, res) => {
 
         await userPreferencesDoc.save();
 
-        res.send(userPreferencesDoc.trackedPlayers);
+        res.send(userPreferencesDoc);
     } catch (e) {
         res.status(422).send({
             error: 'Error tracking player: ' + e.message
@@ -81,7 +81,7 @@ router.delete('/trackedPlayer', async (req, res) => {
 
         await userPreferencesDoc.save();
 
-        res.send(userPreferencesDoc.trackedPlayers);
+        res.send(userPreferencesDoc);
     } catch (e) {
         res.status(422).send({
             error: 'Error tracking player: ' + e.message

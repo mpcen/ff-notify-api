@@ -17,7 +17,7 @@ router.get('/recentPlayerNews', async (req, res) => {
 
     try {
         const userPreferencesDoc = await UserPreferences.findOne({ userId });
-        const { sortTimelineBy, trackedPlayers } = userPreferencesDoc;
+        const { timelineSortType, trackedPlayers } = userPreferencesDoc;
         const { page } = req.query;
 
         const options = {
@@ -27,7 +27,7 @@ router.get('/recentPlayerNews', async (req, res) => {
         };
 
         // BY DATE
-        if (sortTimelineBy === 0) {
+        if (timelineSortType === 0) {
             try {
                 const recentPlayerNewsDoc = await RecentPlayerNews.paginate(
                     { 'player.id': { $in: trackedPlayers } },
@@ -40,7 +40,7 @@ router.get('/recentPlayerNews', async (req, res) => {
             }
 
             // BY PLAYER
-        } else if (sortTimelineBy === 1) {
+        } else if (timelineSortType === 1) {
             const { playerId } = req.query;
 
             if (!playerId) {
