@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 
 const playerSchema = new mongoose.Schema({
-    id: String,
+    id: {
+        type: String,
+        unique: true
+    },
     name: String,
     suffix: String,
     college: String,
@@ -10,8 +13,6 @@ const playerSchema = new mongoose.Schema({
     number: String,
     avatarUrl: String
 });
-
-playerSchema.index({ name: 1 });
 
 const Player = mongoose.model('Player', playerSchema);
 

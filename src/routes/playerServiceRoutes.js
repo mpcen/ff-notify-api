@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 const { Player } = require('../db/models/Player');
 
-
 router.get('/players', async (req, res) => {
     try {
         const response = await Player.find();
