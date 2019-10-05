@@ -1,7 +1,7 @@
 const express = require('express');
 
-const requireAuth = require('../middlewares/requireAuth');
 const { UserPreferences } = require('../db/models/UserPreferences');
+const requireAuth = require('../middlewares/requireAuth');
 
 const router = express.Router();
 router.use(requireAuth);

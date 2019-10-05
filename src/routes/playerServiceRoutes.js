@@ -1,7 +1,10 @@
 const express = require('express');
 
-const router = express.Router();
+const requireAuth = require('../middlewares/requireAuth');
 const { Player } = require('../db/models/Player');
+
+const router = express.Router();
+router.use(requireAuth);
 
 router.get('/players', async (req, res) => {
     try {
