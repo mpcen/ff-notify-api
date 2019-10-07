@@ -76,10 +76,18 @@ router.post('/recentPlayerNews', async (req, res) => {
 
     try {
         await asyncForEach(recentPlayerNews, async recentPlayerNewsArticle => {
-            try {
-                await RecentPlayerNews.create(recentPlayerNewsArticle);
-                storedRecords++;
-            } catch (e) {}
+            const { contentId, platform, player } = recentPlayerNewsArticle;
+            const exists = await RecentPlayerNews.findOne({ contentId, platform, 'player.id': player.id });
+
+            if (!exists) {
+                try {
+                    await RecentPlayerNews.create(recentPlayerNewsArticle);
+                    storedRecords++;
+                } catch (e) {
+                    console.log('Error in POST /recentplayernews asyncForEach:', e);
+                    res.sendStatus(500);
+                }
+            }
         });
 
         console.log('Stored', storedRecords, 'new recent player news items');

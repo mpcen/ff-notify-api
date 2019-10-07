@@ -1,19 +1,19 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 
-const { playerSchema } = require('./Player');
-
 const recentPlayerNewsSchema = new mongoose.Schema({
     platform: String,
     username: String,
     contentId: String,
-    player: playerSchema,
+    player: {
+        id: String,
+        teamId: Number
+    },
     content: String,
     time: Date
 });
 
-recentPlayerNewsSchema.index({ contentId: 1, platform: 1 }, { unique: true });
-recentPlayerNewsSchema.index({ 'player.id': 1, time: -1 });
+recentPlayerNewsSchema.index({ contentId: 1, platform: 1, 'player.id': 1 }, { unique: true });
 recentPlayerNewsSchema.index({ time: -1 });
 recentPlayerNewsSchema.plugin(mongoosePaginate);
 
