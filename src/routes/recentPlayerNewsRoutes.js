@@ -8,6 +8,26 @@ const { asyncForEach } = require('../util/asyncForEach');
 const router = express.Router();
 router.use(requireAuth);
 
+// GET /allNews
+// Returns all latest news
+router.get('/allPlayerNews', async (req, res) => {
+    const { page } = req.query;
+
+    const options = {
+        page: parseInt(page) || 1,
+        limit: 15,
+        sort: { time: -1 }
+    };
+
+    try {
+        const recentPlayerNewsDoc = await RecentPlayerNews.paginate({}, options);
+
+        res.send(recentPlayerNewsDoc);
+    } catch (e) {
+        return res.status(422).send({ error: 'Error fetching allPlayerNews' });
+    }
+});
+
 // GET /recentPlayerNews
 // Returns an ordered list of recent player news for tracked players.
 // The order is in order of tracked players (taken from trackedPlayerOrder)
