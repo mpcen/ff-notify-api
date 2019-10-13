@@ -1,6 +1,14 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 
+const childNodeSchema = new mongoose.Schema({
+    contentType: String,
+    data: String | null,
+    text: Boolean,
+    link: Boolean,
+    username: Boolean
+});
+
 const recentPlayerNewsSchema = new mongoose.Schema({
     platform: String,
     username: String,
@@ -10,7 +18,8 @@ const recentPlayerNewsSchema = new mongoose.Schema({
         teamId: Number
     },
     content: String,
-    time: Date
+    time: Date,
+    childNodes: [childNodeSchema]
 });
 
 recentPlayerNewsSchema.index({ contentId: 1, platform: 1, 'player.id': 1 }, { unique: true });
