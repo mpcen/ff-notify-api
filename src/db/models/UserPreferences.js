@@ -12,7 +12,7 @@ const userPreferencesSchema = new mongoose.Schema({
     },
     timelineSortType: {
         type: Number,
-        default: 0
+        default: 2
     }
 });
 
