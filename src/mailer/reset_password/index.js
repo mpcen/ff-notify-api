@@ -1,5 +1,3 @@
-'use strict';
-
 const nodemailer = require('nodemailer');
 
 const { NODEMAILER_PASSWORD } = process.env;
@@ -40,7 +38,8 @@ const mailer = async (email, generatedUrl) => {
         // console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
         // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
     } catch (e) {
-        return res.status(422).send('Error sending transporter email message');
+        console.log('Error inside mailer:', e);
+        throw new Error('Error sending transporter email message');
     }
 };
 
