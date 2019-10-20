@@ -85,7 +85,6 @@ router.post('/resetpassword', async (req, res) => {
 
         res.send(generatedUrl);
     } catch (e) {
-        console.log('e:', e);
         return res.status(422).send('Error resetting password');
     }
 });
@@ -124,7 +123,7 @@ router.post('/resetpassword/:userId/:token', async (req, res) => {
                 user.password = password;
 
                 await user.save();
-                return res.send('Password has been reset');
+                return res.send('Password has been reset. You may now log in using your new password.');
             } else {
                 return res.status(401).send({ error: 'Unauthorized password reset' });
             }

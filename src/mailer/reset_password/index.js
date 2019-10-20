@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-const { NODEMAILER_PASSWORD } = process.env;
+const { NODEMAILER_SERVICE_CLIENT, NODEMAILER_PRIVATE_KEY } = process.env;
 
 // async..await is not allowed in global scope, must use a wrapper
 const mailer = async (email, generatedUrl) => {
@@ -14,19 +14,23 @@ const mailer = async (email, generatedUrl) => {
         port: 465,
         secure: true, // true for 465, false for other ports
         auth: {
-            user: 'mouseplaycen1@gmail.com', // generated ethereal user
-            pass: NODEMAILER_PASSWORD // generated ethereal password
+            type: 'OAuth2',
+            user: 'admin@persource.gg',
+            serviceClient: NODEMAILER_SERVICE_CLIENT,
+            privateKey: NODEMAILER_PRIVATE_KEY
         }
     });
 
     try {
+        await transporter.verify();
+
         // send mail with defined transport object
         let info = await transporter.sendMail({
-            from: '"PerSource.gg Support" <support@persource.gg>', // sender address
+            from: '"PerSource.gg" <admin@persource.gg>', // sender address
             to: email, // list of receivers
-            subject: 'One-time password reset for PerSource.gg', // Subject line
+            subject: 'Reset your password', // Subject line
             html: `
-                <p>To reset your PerSource.gg password, click the following link:</p>
+                <p>To reset your password, click the following link:</p>
                 <p><a href=${generatedUrl}>${generatedUrl}</a></p>
             ` // html body
         });
