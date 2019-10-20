@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const { User } = require('../db/models/User');
+const APP_SECRET = process.env.APP_SECRET;
 
 module.exports = (req, res, next) => {
     const { authorization } = req.headers;
@@ -11,7 +12,7 @@ module.exports = (req, res, next) => {
 
     const token = authorization.replace('Bearer ', '');
 
-    jwt.verify(token, 'APP_SECRET', async (error, payload) => {
+    jwt.verify(token, APP_SECRET, async (error, payload) => {
         if (error) {
             return res.status(401).send({ error: 'You must be logged in.' });
         }
