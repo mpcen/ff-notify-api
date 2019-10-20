@@ -85,6 +85,7 @@ router.post('/resetpassword', async (req, res) => {
 
         res.send(generatedUrl);
     } catch (e) {
+        console.log('e:', e);
         return res.status(422).send('Error resetting password');
     }
 });
@@ -102,6 +103,7 @@ router.get('/resetpassword/:userId/:token', async (req, res) => {
 
 // POST /resetpassword
 router.post('/resetpassword/:userId/:token', async (req, res) => {
+    debugger;
     const { userId, token } = req.params;
     const { password } = req.body;
 
