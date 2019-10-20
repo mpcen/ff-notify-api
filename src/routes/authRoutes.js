@@ -27,7 +27,6 @@ router.post('/signup', async (req, res) => {
 
         res.send({ email, token });
     } catch (e) {
-        console.log('e:', e);
         return res.status(422).send('Email already in use');
     }
 });
