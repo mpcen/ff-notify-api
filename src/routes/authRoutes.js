@@ -89,7 +89,18 @@ router.post('/resetpassword', async (req, res) => {
     }
 });
 
-// POST /complete_password_reset
+// GET /resetpassword
+router.get('/resetpassword/:userId/:token', async (req, res) => {
+    const { userId, token } = req.params;
+
+    if (!userId || !token) {
+        return res.status(500).send('Error generating password reset token');
+    }
+
+    res.render('reset_password', { userId, token });
+});
+
+// POST /resetpassword
 router.post('/resetpassword/:userId/:token', async (req, res) => {
     const { userId, token } = req.params;
     const { password } = req.body;
@@ -104,7 +115,7 @@ router.post('/resetpassword/:userId/:token', async (req, res) => {
 
         jwt.verify(token, secret, async (error, payload) => {
             if (error) {
-                return res.status(401).send({ error: 'Error verifying password reset token' });
+                return res.status(401).send({ error: 'Password reset token is invalid or expired' });
             }
 
             if (payload.userId == user._id) {

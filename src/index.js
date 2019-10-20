@@ -13,12 +13,16 @@ const recentPlayerNewsRoutes = require('./routes/recentPlayerNewsRoutes');
 const trackedPlayerRoutes = require('./routes/trackedPlayerRoutes');
 const userPreferencesRoutes = require('./routes/userPreferencesRoutes');
 
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: '999kb' }));
 app.use(authRoutes);
 app.use(playerServiceRoutes);
 app.use(recentPlayerNewsRoutes);
 app.use(trackedPlayerRoutes);
 app.use(userPreferencesRoutes);
+
+app.set('views', __dirname + '/views');
+app.set('view engine', 'pug');
 
 mongoose.connect(process.env.DB_URI, {
     useNewUrlParser: true,
