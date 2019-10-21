@@ -102,7 +102,6 @@ router.get('/resetpassword/:userId/:token', async (req, res) => {
 
 // POST /resetpassword
 router.post('/resetpassword/:userId/:token', async (req, res) => {
-    debugger;
     const { userId, token } = req.params;
     const { password } = req.body;
 
