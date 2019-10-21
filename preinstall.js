@@ -6,7 +6,7 @@ const { GOOGLE_CONFIG, GOOGLE_APPLICATION_CREDENTIALS } = process.env;
 
 fs.writeFile(GOOGLE_APPLICATION_CREDENTIALS, GOOGLE_CONFIG, err => {
     if (err) {
-        throw new Error('Error writing', GOOGLE_APPLICATION_CREDENTIALS);
+        throw new Error('Error writing', GOOGLE_APPLICATION_CREDENTIALS, err);
     }
 
     console.log('Created GOOGLE CONFIG');
