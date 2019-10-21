@@ -1,5 +1,15 @@
 const nodemailer = require('nodemailer');
-const key = require('../../../google-credentials-heroku.json');
+
+const { GOOGLE_CLIENT_ID, GOOGLE_PRIVATE_KEY, EMAIL_ADDRESS } = process.env;
+
+let key;
+
+process.env.NODE_ENV !== 'production'
+    ? (key = {
+          client_id: GOOGLE_CLIENT_ID,
+          private_key: GOOGLE_PRIVATE_KEY
+      })
+    : (key = require('../../../google-credentials-heroku.json'));
 
 // async..await is not allowed in global scope, must use a wrapper
 const mailer = async (email, generatedUrl) => {
@@ -14,7 +24,7 @@ const mailer = async (email, generatedUrl) => {
         secure: true, // true for 465, false for other ports
         auth: {
             type: 'OAuth2',
-            user: 'admin@persource.gg',
+            user: EMAIL_ADDRESS,
             serviceClient: key.client_id,
             privateKey: key.private_key
         }

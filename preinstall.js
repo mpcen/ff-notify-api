@@ -1,5 +1,3 @@
-if (process.env.NODE_ENV !== 'production') require('dotenv').config();
-
 const fs = require('fs');
 
 const { GOOGLE_CONFIG, GOOGLE_APPLICATION_CREDENTIALS } = process.env;
