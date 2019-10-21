@@ -5,6 +5,7 @@
     "license": "MIT",
     "scripts": {
         "start": "node ./src/index.js",
+        "preinstall": "node ./preinstall.js",
         "dev": "nodemon ./src/index.js",
         "dev-inspect": "nodemon --inspect -r ./src/index.js",
         "db-migrations-start": "node ./src/db/scripts/migrations/index.js",
@@ -22,6 +23,7 @@
         "body-parser": "^1.19.0",
         "dotenv": "^8.1.0",
         "express": "^4.17.1",
+        "google-auth-library": "^5.5.0",
         "jsonwebtoken": "^8.5.1",
         "lodash": "^4.17.13",
         "mongoose": "^5.5.12",
