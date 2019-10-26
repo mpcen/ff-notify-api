@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const mongoosePaginate = require('mongoose-paginate-v2');
+const mongoosePaginate = require('mongoose-paginate');
 
 const childNodeSchema = new mongoose.Schema({
     contentType: String,
@@ -14,6 +14,7 @@ const recentPlayerNewsSchema = new mongoose.Schema({
     username: String,
     contentId: String,
     player: {
+        // this might be suspect. why not just use playerId here instead?
         id: String,
         teamId: Number
     },

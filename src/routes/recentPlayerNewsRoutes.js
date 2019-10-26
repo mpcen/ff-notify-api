@@ -12,7 +12,6 @@ router.use(requireAuth);
 // Returns all latest news
 router.get('/allPlayerNews', async (req, res) => {
     const { page } = req.query;
-
     const options = {
         page: parseInt(page) || 1,
         limit: 15,
