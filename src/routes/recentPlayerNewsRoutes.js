@@ -14,7 +14,7 @@ router.get('/allPlayerNews', async (req, res) => {
     const { page } = req.query;
     const options = {
         page: parseInt(page) || 1,
-        limit: 15,
+        limit: 50,
         sort: { time: -1 }
     };
 
@@ -41,7 +41,7 @@ router.get('/recentPlayerNews', async (req, res) => {
 
         const options = {
             page: parseInt(page) || 1,
-            limit: 15,
+            limit: 50,
             sort: { time: -1 }
         };
 
