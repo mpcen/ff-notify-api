@@ -67,7 +67,10 @@ router.get('/recentPlayerNews', async (req, res) => {
             }
 
             try {
-                const recentPlayerNewsDoc = await RecentPlayerNews.paginate({ 'player.id': playerId }, options);
+                const recentPlayerNewsDoc = await RecentPlayerNews.paginate(
+                    { 'player.id': playerId },
+                    options
+                );
 
                 res.send(recentPlayerNewsDoc);
             } catch (e) {
@@ -96,7 +99,11 @@ router.post('/recentPlayerNews', async (req, res) => {
     try {
         await asyncForEach(recentPlayerNews, async recentPlayerNewsArticle => {
             const { contentId, platform, player } = recentPlayerNewsArticle;
-            const exists = await RecentPlayerNews.findOne({ contentId, platform, 'player.id': player.id });
+            const exists = await RecentPlayerNews.findOne({
+                contentId,
+                platform,
+                'player.id': player.id
+            });
 
             if (!exists) {
                 try {
