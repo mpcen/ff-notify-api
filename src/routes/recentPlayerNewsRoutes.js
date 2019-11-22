@@ -36,7 +36,14 @@ router.get('/recentPlayerNews', async (req, res) => {
 
     try {
         const userPreferencesDoc = await UserPreferences.findOne({ userId });
+
+        console.log('userPreferencesDoc:', userPreferencesDoc);
+
         const { timelineSortType, trackedPlayers } = userPreferencesDoc;
+
+        console.log('timelineSortType:', timelineSortType);
+        console.log('trackedPlayers:', trackedPlayers);
+
         const { page } = req.query;
 
         const options = {
@@ -45,8 +52,12 @@ router.get('/recentPlayerNews', async (req, res) => {
             sort: { time: -1 }
         };
 
+        console.log('options:', options);
+
         // BY DATE
         if (timelineSortType === 0) {
+            console.log('timelineSortType === 0');
+
             try {
                 const recentPlayerNewsDoc = await RecentPlayerNews.paginate(
                     { 'player.id': { $in: trackedPlayers } },
@@ -60,6 +71,8 @@ router.get('/recentPlayerNews', async (req, res) => {
 
             // BY PLAYER
         } else if (timelineSortType === 1) {
+            console.log('timelineSortType === 1');
+
             const { playerId } = req.query;
 
             if (!playerId) {
@@ -79,6 +92,8 @@ router.get('/recentPlayerNews', async (req, res) => {
                 });
             }
         } else {
+            console.log('unknown error');
+
             return res.status(422).send({
                 error: 'Unknown Error when fetching recentPlayerNews by Player'
             });
