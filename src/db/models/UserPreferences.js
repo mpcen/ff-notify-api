@@ -12,7 +12,7 @@ const userPreferencesSchema = new mongoose.Schema({
     },
     timelineSortType: {
         type: Number,
-        default: 2
+        default: 2 // all players
     }
 });
 
