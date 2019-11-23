@@ -58,11 +58,11 @@ router.get('/playerNews', async (req, res) => {
     }
 });
 
-// POST /recentPlayerNews
+// POST /playerNews
 // Posts a list of recent player news
 // req.body contains the payload of scraped/built recent player news
 // which can cantain already-stored recent player news
-router.post('/recentPlayerNews', async (req, res) => {
+router.post('/playerNews', async (req, res) => {
     const recentPlayerNews = req.body;
     let storedRecords = 0;
 
